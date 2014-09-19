@@ -8,7 +8,7 @@
     "npm": "1.3.x"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "gulp & nodemon index.js"
   },
   "dependencies": {
     "hapi": "~6.4.0",
