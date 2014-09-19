@@ -18,7 +18,8 @@
     "jade": "~1.5.0",
     "jquery": "~2.1.1",
     "meatspace-publico": "~1.0.1",
-    "ws": "^0.4.32"
+    "ws": "^0.4.32",
+    "reconnecting-websocket": "joewalnes/reconnecting-websocket.git#23d2fbcc8165720445cab4a883a694c1342ffc8b"
   },
   "devDependencies": {
     "nodemon": "~1.2.1",
