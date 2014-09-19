@@ -12,10 +12,28 @@
   },
   "dependencies": {
     "hapi": "~6.4.0",
-    "nconf": "~0.6.9"
+    "nconf": "~0.6.9",
+    "crumb": "^3.1.0",
+    "browserify": "^5.9.3",
+    "jade": "~1.5.0",
+    "jquery": "~2.1.1",
+    "meatspace-publico": "~1.0.1",
+    "ws": "^0.4.32"
   },
   "devDependencies": {
-    "nodemon": "~1.2.1"
+    "nodemon": "~1.2.1",
+    "gulp": "^3.8.7",
+    "gulp-autowatch": "0.0.1",
+    "gulp-cached": "^1.0.1",
+    "gulp-csso": "^0.2.9",
+    "gulp-if": "^1.2.4",
+    "gulp-match": "^0.2.0",
+    "gulp-sourcemaps": "^1.1.1",
+    "gulp-uglify": "^0.3.1",
+    "rimraf": "^2.2.8",
+    "vinyl-buffer": "0.0.0",
+    "vinyl-source-stream": "^0.1.1",
+    "mkdirp": "^0.5.0"
   },
   "repository": {
     "type": "git",
