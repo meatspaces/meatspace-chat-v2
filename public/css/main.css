@@ -53,8 +53,19 @@ body, input {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+body, html {
+  height: 100%;
+  position: relative;
+}
+
 body {
   padding: 20px;
+}
+
+.wrapper {
+  height: 100%;
+  min-width: 590px;
+  position: relative;
 }
 
 a {
@@ -64,24 +75,43 @@ a {
 }
 
 ol {
+  clear: both;
   float: left;
-  margin: 10px 10px;
+  margin: 10px 0 200px;
   position: relative;
-  width: 290px;
+  width: 100%
+  z-index: 1;
+}
+
+#messages-filtered {
+  background-color: rgba(255, 255, 255, 0.95);
+  bottom: 0;
+  height: 100%;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  width: 580px;
+  z-index: 2;
 }
 
 li {
-  padding: 0 0 15px 0;
+  clear: both;
+  float: left;
+  width: 580px;
 }
 
 li p {
+  float: left;
   font-size: 1.1rem;
   font-weight: 100;
   line-height: 1.2rem;
-  padding-top: 10px;
+  overflow: hidden;
+  padding: 10px;
+  width: 270px;
 }
 
 video {
+  float: left;
   height: 198px;
   width: 264px;
 }
@@ -91,8 +121,18 @@ footer {
   width: 100%;
 }
 
+#preview {
+  background-color: #111;
+  bottom: 0;
+  height: 198px;
+  left: 20px;
+  position: fixed;
+  width: 264px;
+  z-index: 4;
+}
+
 #comment {
-  background-color: #f00;
+  background-color: rgba(1, 1, 1, 0.8);
   border: 0;
   bottom: 0;
   font-size: 1.3rem;
@@ -102,5 +142,5 @@ footer {
   right: 0;
   position: fixed;
   width: 100%;
-  z-index: 2;
+  z-index: 3;
 }
