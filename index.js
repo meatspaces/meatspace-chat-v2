@@ -88,7 +88,10 @@ function add(request, reply) {
   try {
     ws.send(result.content.data);
   } catch (err) {
-    ws = new WebSocket.Server({ server: server.listener });
+    ws = new WebSocket.Server({
+      server: server.listener
+    });
+
     ws.on('open', function (ws) {
       console.log('opened');
     });
