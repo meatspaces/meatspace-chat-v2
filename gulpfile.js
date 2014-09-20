@@ -32,7 +32,7 @@ gulp.task('static', function(){
 });
 
 gulp.task('js', function(){
-  return browserify('./public/js/main.js', {debug: true})
+  return browserify('./public/js/main.js')
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
@@ -44,7 +44,7 @@ gulp.task('js', function(){
 });
 
 gulp.task('css', function(){
-  return gulp.src('./public/css/main.css')
+  return gulp.src(['./public/css/reset.css', './public/css/main.css'])
     .pipe(cached('css'))
     .pipe(csso())
     .pipe(gulp.dest('dist/css'))
