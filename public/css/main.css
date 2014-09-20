@@ -70,16 +70,17 @@ ol {
   overflow-y: scroll;
   padding-top: 25px;
   position: fixed;
-  right: 10px;
+  right: 5px;
   top: 0;
   min-width: 520px;
-  width: 50%;
+  width: 45%;
   z-index: 2;
 }
 
 li {
   clear: both;
   float: left;
+  height: 150px;
   min-width: 475px;
   width: 100%;
 }
@@ -94,7 +95,7 @@ li p {
   overflow: hidden;
   padding: 8px 5px 8px 10px;
   min-width: 280px;
-  width: 40%;
+  width: 30%;
 }
 
 #messages-filtered li:last-child {
@@ -102,7 +103,7 @@ li p {
 }
 
 #messages-filtered li p {
-  width: 40%;
+  width: 50%;
 }
 
 video {
