@@ -56,3 +56,51 @@ body, input {
 body {
   padding: 20px;
 }
+
+a {
+  background-color: #95f7f1;
+  color: #2d7470;
+  text-decoration: none;
+}
+
+ol {
+  float: left;
+  margin: 10px 10px;
+  position: relative;
+  width: 290px;
+}
+
+li {
+  padding: 0 0 15px 0;
+}
+
+li p {
+  font-size: 1.1rem;
+  font-weight: 100;
+  line-height: 1.2rem;
+  padding-top: 10px;
+}
+
+video {
+  height: 198px;
+  width: 264px;
+}
+
+footer {
+  position: relative;
+  width: 100%;
+}
+
+#comment {
+  background-color: #f00;
+  border: 0;
+  bottom: 0;
+  font-size: 1.3rem;
+  left: 0;
+  line-height: 1.4rem;
+  padding: 10px 0;
+  right: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+}
