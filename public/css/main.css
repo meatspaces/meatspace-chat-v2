@@ -40,6 +40,18 @@ header {
   background-color: #49c3b0;
 }
 
+.actions {
+  bottom: 0;
+  position: absolute;
+  right: 0;
+}
+
+.actions button {
+  border: 0;
+  background-color: #111;
+  color: #eee;
+}
+
 #invisible-mode {
   background-color: #60f3c4;
   padding: 20px 10px 10px;
@@ -95,6 +107,7 @@ ol {
   margin: 5px 0 152px;
   padding-top: 20px;
   position: relative;
+  max-width: 600px;
   width: 100%;
   z-index: 1;
 }
@@ -119,6 +132,7 @@ li {
   float: left;
   height: 150px;
   min-width: 475px;
+  position: relative;
   width: 100%;
 }
 

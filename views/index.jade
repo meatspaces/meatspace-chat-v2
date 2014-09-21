@@ -4,22 +4,32 @@ block content
   ol#messages
     li
       video(src='/images/sample.webm', autoplay='autoplay', loop)
-      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a turpis nec lectus vestibulum placerat in quis nisi. Praesent ut lacus arcu. Vivamus libero nunc, vulputate sed accumsan a&nbsp;
-        a(href='#') link.com
+      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a turpis nec lectus vestibulum placerat in quis nisi. Praesent ut lacus arcu. Vivamus libero nunc, vulputate sed accumsan a link.com Vivamus libero nunc, vulputate sed accumsan Vivamu
+      .actions
+        button#mute mute
+        button#filter filter
     li
       video(src='/images/sample.webm', autoplay='autoplay', loop)
       p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a turpis nec lectus vestibulum placerat in quis nisi. Praesent ut lacus arcu. Vivamus libero nunc, vulputate sed accumsan a&nbsp;
         a(href='#') link.com
-
+      .actions
+        button#mute mute
+        button#filter filter
   ol#messages-filtered
     li
       video(src='/images/sample.webm', autoplay='autoplay', loop)
       p Lorem ipsum dolor sit amet, costibulum placer, vulputate sed accumsan a&nbsp;
         a(href='#') link.com
+      .actions
+        button#mute mute
+        button#unfilter unfilter
     li
       video(src='/images/sample.webm', autoplay='autoplay', loop)
       p Lorem ipsum dolor sit amet, costibulum placer, vulputate sed accumsan a&nbsp;
         a(href='#') link.com
+      .actions
+        button#mute mute
+        button#unfilter unfilter
 
 block footer
   #preview
