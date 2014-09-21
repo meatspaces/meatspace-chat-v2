@@ -12,15 +12,32 @@ var messages = $('#messages');
 var messagesFiltered = $('#messages-filtered');
 var filtered = $('#filtered');
 var unmute = $('#unmute');
+var invisible = $('#invisible');
+var invisibleMode = $('#invisible-mode');
+var form = $('form');
 
 filtered.click(function () {
-  messagesFiltered.slideToggle('slow', function () {
+  messagesFiltered.slideToggle('fast', function () {
     if (filtered.hasClass('on')) {
       filtered.removeClass('on');
     } else {
       filtered.addClass('on');
     }
   });
+});
+
+invisible.click(function () {
+  if (!invisible.hasClass('on')) {
+    invisibleMode.slideDown('fast');
+    invisible.addClass('on');
+  } else {
+    invisibleMode.slideUp('fast');
+    invisible.removeClass('on');
+  }
+});
+
+invisibleMode.on('click', 'button', function () {
+  invisibleMode.slideUp('fast');
 });
 
 form.submit(function (ev) {

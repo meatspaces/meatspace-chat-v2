@@ -40,7 +40,40 @@ header {
   background-color: #49c3b0;
 }
 
-#filtered.on {
+#invisible-mode {
+  background-color: #60f3c4;
+  padding: 20px 10px 10px;
+  color: #444;
+  display: none;
+  line-height: 1.1rem;
+  position: fixed;
+  right: 5px;
+  top: 30px;
+  z-index: 4;
+  width: 300px;
+}
+
+#invisible-mode h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+#invisible-mode p {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+#invisible-mode button {
+  background-color: #222;
+  color: #eee;
+  font-size: 1.1rem;
+  padding: 3px 2px;
+  border: 0;
+  float: right;
+}
+
+#menu button.on {
   background-color: #f00;
 }
 
