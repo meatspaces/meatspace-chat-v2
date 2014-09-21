@@ -13,12 +13,12 @@
   "dependencies": {
     "hapi": "~6.4.0",
     "nconf": "~0.6.9",
-    "crumb": "^3.1.0",
     "browserify": "^5.9.3",
     "jade": "~1.5.0",
     "jquery": "~2.1.1",
     "meatspace-publico": "~1.0.1",
     "ws": "^0.4.32",
+    "fluent-ffmpeg": "~2.0.0-rc2",
     "reconnecting-websocket": "joewalnes/reconnecting-websocket.git#23d2fbcc8165720445cab4a883a694c1342ffc8b"
   },
   "devDependencies": {
