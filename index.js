@@ -2,8 +2,10 @@
 
 var Hapi = require('hapi');
 var nconf = require('nconf');
-var WebSocket = require('ws');
-var ws;
+var WebSocketServer = require('ws').Server;
+var wss;
+
+var services = require('./lib/services');
 
 nconf.argv().env().file({ file: 'local.json' });
 
@@ -31,10 +33,10 @@ var routes = [
     }
   },
   {
-    method: 'POST',
-    path: '/message',
+    method: 'GET',
+    path: '/recent',
     config: {
-      handler: add
+      handler: services.recent
     }
   }
 ];
@@ -53,21 +55,24 @@ server.route({
   }
 });
 
-server.pack.register({
-  plugin: require('crumb')
-}, function (err) {
-  if (err) {
-    throw err;
-  }
-});
-
 server.start(function () {
-  ws = new WebSocket.Server({ server: server.listener });
+  wss = new WebSocketServer({ server: server.listener });
 
-  ws.on('connection', function (socket) {
-    socket.on('message', function (message) {
-      subscribers[message] = subscribers[message] || [];
-      subscribers[message].push(socket);
+  wss.on('open', function (ws) {
+    console.log('connected to ws');
+  });
+
+  wss.on('connection', function (ws) {
+    ws.on('message', function (data) {
+      data = JSON.parse(data);
+      console.log('incoming ', data)
+      var payload = {
+        message: data.message,
+        media: data.media
+      };
+
+      services.addMessage(payload);
+      ws.send(JSON.stringify(payload));
     });
   });
 });
@@ -76,28 +81,4 @@ function home(request, reply) {
   reply.view('index', {
     analytics: nconf.get('analytics')
   });
-}
-
-function recent(request, reply) {
-  reply({
-    messages: messages
-  });
-}
-
-function add(request, reply) {
-  try {
-    ws.send(result.content.data);
-  } catch (err) {
-    ws = new WebSocket.Server({
-      server: server.listener
-    });
-
-    ws.on('open', function (ws) {
-      console.log('opened');
-    });
-
-    setTimeout(function () {
-      ws.send(result.content.data);
-    }, 1000);
-  }
 }

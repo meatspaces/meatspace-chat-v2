@@ -32,8 +32,12 @@ header {
   background-color: #111;
   color: #eee;
   border: 0;
-  font-size: 1rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
+}
+
+#menu button:hover {
+  background-color: #49c3b0;
 }
 
 #filtered.on {
@@ -136,6 +140,10 @@ form {
   position: fixed;
   width: 100%;
   z-index: 3;
+}
+
+#media {
+  display: none;
 }
 
 #comment {
