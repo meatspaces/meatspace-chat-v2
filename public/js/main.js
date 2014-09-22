@@ -1,5 +1,13 @@
 var $ = require('jquery');
 var ReconnectingWebSocket = require('ReconnectingWebSocket');
+var Webrtc2images = require('webrtc2images');
+
+var rtc = new Webrtc2images({
+  frames: 10,
+  type: 'image/jpeg',
+  quality: 0.4,
+  interval: 200
+});
 
 var ws = new ReconnectingWebSocket('ws://' +
   location.hostname + (location.port ? ':' + location.port : ''));
@@ -15,6 +23,9 @@ var unmute = $('#unmute');
 var invisible = $('#invisible');
 var invisibleMode = $('#invisible-mode');
 var form = $('form');
+var comment = $('#comment');
+
+rtc.startVideo();
 
 filtered.click(function () {
   messagesFiltered.slideToggle('fast', function () {
@@ -43,10 +54,17 @@ invisibleMode.on('click', 'button', function () {
 form.submit(function (ev) {
   ev.preventDefault();
 
-  ws.send(JSON.stringify({
-    message: $('#comment').val(),
-    media: $('#media').val()
-  }));
+  rtc.recordVideo(function (err, frames) {
+    if (!err) {
+      console.log(frames);
+      ws.send(JSON.stringify({
+        message: comment.val(),
+        media: frames
+      }));
+    }
+  });
+}).always(function () {
+  comment.val('');
 });
 
 ws.onmessage = function (ev) {

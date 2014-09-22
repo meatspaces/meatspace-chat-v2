@@ -168,7 +168,7 @@ footer {
   width: 100%;
 }
 
-#preview {
+#video-preview {
   background-color: #111;
   bottom: 0;
   height: 150px;
@@ -189,10 +189,6 @@ form {
   z-index: 3;
 }
 
-#media {
-  display: none;
-}
-
 #comment {
   background-color: transparent;
   color: #eee;
@@ -203,6 +199,18 @@ form {
   margin-left: 205px;
   padding: 10px;
   width: 70%;
+}
+
+.debugger {
+  bottom: 40px;
+  color: #fff;
+  font-size: 1.9rem;
+  height: 50px;
+  left: 80px;
+  position: fixed;
+  text-align: center;
+  width: 50px;
+  z-index: 5;
 }
 
 @media only screen and (max-width: 850px) {

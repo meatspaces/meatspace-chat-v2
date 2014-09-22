@@ -19,6 +19,9 @@
     "meatspace-publico": "~1.0.1",
     "ws": "^0.4.32",
     "fluent-ffmpeg": "~2.0.0-rc2",
+    "webrtc2images": "~1.2.0",
+    "data-uri-to-buffer": "~0.0.3",
+    "uuid": "~1.4.1",
     "reconnecting-websocket": "joewalnes/reconnecting-websocket.git#23d2fbcc8165720445cab4a883a694c1342ffc8b"
   },
   "devDependencies": {

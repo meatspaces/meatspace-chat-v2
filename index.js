@@ -65,13 +65,15 @@ server.start(function () {
   wss.on('connection', function (ws) {
     ws.on('message', function (data) {
       data = JSON.parse(data);
-      console.log('incoming ', data)
+
       var payload = {
         message: data.message,
         media: data.media
       };
 
-      services.addMessage(payload);
+      services.addMessage(data, function (err, media) {
+        console.log('*********** ', media);
+      });
       ws.send(JSON.stringify(payload));
     });
   });
