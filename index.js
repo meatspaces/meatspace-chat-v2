@@ -72,9 +72,13 @@ server.start(function () {
       };
 
       services.addMessage(data, function (err, media) {
-        console.log('*********** ', media);
+        if (err) {
+          console.log('error ', err);
+        } else {
+          payload.media = media;
+          ws.send(JSON.stringify(payload));
+        }
       });
-      ws.send(JSON.stringify(payload));
     });
   });
 });

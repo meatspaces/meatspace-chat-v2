@@ -3,9 +3,11 @@ var ReconnectingWebSocket = require('ReconnectingWebSocket');
 var Webrtc2images = require('webrtc2images');
 
 var rtc = new Webrtc2images({
+  width: 200,
+  height: 150,
   frames: 10,
   type: 'image/jpeg',
-  quality: 0.4,
+  quality: 0.6,
   interval: 200
 });
 
@@ -56,20 +58,18 @@ form.submit(function (ev) {
 
   rtc.recordVideo(function (err, frames) {
     if (!err) {
-      console.log(frames);
       ws.send(JSON.stringify({
         message: comment.val(),
         media: frames
       }));
     }
+
+    comment.val('');
   });
-}).always(function () {
-  comment.val('');
 });
 
 ws.onmessage = function (ev) {
   var data = JSON.parse(ev.data);
-
   var li = $('<li></li>');
   var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
   var p = $('<p></p>');
