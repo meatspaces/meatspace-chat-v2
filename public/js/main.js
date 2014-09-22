@@ -73,7 +73,8 @@ ws.onmessage = function (ev) {
   var li = $('<li></li>');
   var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
   var p = $('<p></p>');
+  var actions = $('<div class="actions"><button id="mute">mute</button><button id="filter">filter</button>');
   p.html(data.message);
-  li.append(video).append(p);
+  li.append(video).append(p).append(actions);
   messages.append(li);
 }
