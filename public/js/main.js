@@ -6,8 +6,7 @@ var rtc = new Webrtc2images({
   width: 200,
   height: 150,
   frames: 10,
-  type: 'image/jpeg',
-  quality: 0.8,
+  type: 'image/png',
   interval: 200
 });
 
