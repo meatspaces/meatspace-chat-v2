@@ -7,7 +7,7 @@ var rtc = new Webrtc2images({
   height: 150,
   frames: 10,
   type: 'image/jpeg',
-  quality: 0.6,
+  quality: 0.8,
   interval: 200
 });
 
@@ -53,19 +53,25 @@ invisibleMode.on('click', 'button', function () {
   invisibleMode.slideUp('fast');
 });
 
+var submitting = false;
+
 form.submit(function (ev) {
   ev.preventDefault();
 
-  rtc.recordVideo(function (err, frames) {
-    if (!err) {
-      ws.send(JSON.stringify({
-        message: comment.val(),
-        media: frames
-      }));
-    }
+  if (!submitting) {
+    submitting = true;
+    rtc.recordVideo(function (err, frames) {
+      if (!err) {
+        ws.send(JSON.stringify({
+          message: comment.val(),
+          media: frames
+        }));
+      }
 
-    comment.val('');
-  });
+      submitting = false;
+      comment.val('');
+    });
+  }
 });
 
 ws.onmessage = function (ev) {
