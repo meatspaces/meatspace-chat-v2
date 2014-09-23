@@ -224,6 +224,17 @@ form {
   z-index: 6;
 }
 
+#sad-browser h2 {
+  color: #06cdeb;
+  font-size: 2.9rem;
+  padding-top: 20px;
+  text-align: center;
+}
+
+#sad-browser h2 span {
+  font-size: 6rem;
+}
+
 #sad-browser p {
   color: #eee;
   font-size: 2rem;
