@@ -213,6 +213,26 @@ form {
   z-index: 5;
 }
 
+#sad-browser {
+  background-color: rgba(1, 1, 1, 0.8);
+  bottom: 10px;
+  position: fixed;
+  display: none;
+  left: 10px;
+  right: 10px;
+  top: 10px;
+  z-index: 6;
+}
+
+#sad-browser p {
+  color: #eee;
+  font-size: 2rem;
+  font-weight: 100;
+  line-height: 2.4rem;
+  padding: 60px 30px;
+  text-align: center;
+}
+
 @media only screen and (max-width: 850px) {
   #comment {
     width: 60%;

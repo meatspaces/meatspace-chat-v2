@@ -2,13 +2,22 @@ var $ = require('jquery');
 var ReconnectingWebSocket = require('ReconnectingWebSocket');
 var Webrtc2images = require('webrtc2images');
 
-var rtc = new Webrtc2images({
+var rtc = false;
+var webmSupport = false;
+
+rtc = new Webrtc2images({
   width: 200,
   height: 150,
   frames: 10,
   type: 'image/png',
   interval: 200
 });
+
+var testVideo = $('video')[0];
+
+if (testVideo.canPlayType('video/webm; codecs="vp8, vorbis"')) {
+  webmSupport = true;
+}
 
 var ws = new ReconnectingWebSocket('ws://' +
   location.hostname + (location.port ? ':' + location.port : ''));
@@ -25,8 +34,13 @@ var invisible = $('#invisible');
 var invisibleMode = $('#invisible-mode');
 var form = $('form');
 var comment = $('#comment');
+var sadBrowser = $('#sad-browser');
 
-rtc.startVideo();
+rtc.startVideo(function (err) {
+  if (err) {
+    rtc = false;
+  }
+});
 
 filtered.click(function () {
   messagesFiltered.slideToggle('fast', function () {
@@ -54,10 +68,16 @@ invisibleMode.on('click', 'button', function () {
 
 var submitting = false;
 
+if (!rtc && !webmSupport) {
+  sadBrowser.show();
+  form.remove();
+  $('#video-preview').remove();
+}
+
 form.submit(function (ev) {
   ev.preventDefault();
 
-  if (!submitting) {
+  if (rtc && !submitting) {
     submitting = true;
     rtc.recordVideo(function (err, frames) {
       if (!err) {
