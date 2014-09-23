@@ -82,4 +82,5 @@ ws.onmessage = function (ev) {
   p.html(data.message);
   li.append(video).append(p).append(actions);
   messages.append(li);
+  li[0].scrollIntoView();
 }
