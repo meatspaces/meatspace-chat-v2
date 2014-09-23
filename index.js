@@ -62,6 +62,12 @@ server.start(function () {
     console.log('connected to ws');
   });
 
+  wss.broadcast = function (data) {
+    for (var i in this.clients) {
+      this.clients[i].send(data);
+    }
+  };
+
   wss.on('connection', function (ws) {
     ws.on('message', function (data) {
       data = JSON.parse(data);
@@ -76,7 +82,7 @@ server.start(function () {
           console.log('error ', err);
         } else {
           payload.media = media;
-          ws.send(JSON.stringify(payload));
+          wss.broadcast(JSON.stringify(payload));
         }
       });
     });
