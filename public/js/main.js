@@ -5,6 +5,8 @@ var socket = io();
 var rtc = false;
 var webmSupport = false;
 
+var MAX_LIMIT = 15;
+
 rtc = new Webrtc2images({
   width: 200,
   height: 150,
@@ -94,5 +96,12 @@ socket.on('message', function (data) {
   p.html(data.message);
   li.append(video).append(p).append(actions);
   messages.append(li);
+
+  var children = messages.find('li');
+
+  if (children.length > MAX_LIMIT) {
+    children.slice(0, children.length - MAX_LIMIT).remove();
+  }
+
   li[0].scrollIntoView();
 });
