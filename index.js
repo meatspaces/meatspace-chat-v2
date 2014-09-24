@@ -88,13 +88,14 @@ server.start(function () {
     socket.emit('ip', ip);
 
     socket.on('message', function (data) {
+      data = JSON.parse(data);
       var userId = getUserId(data.fingerprint, ip);
-      /*
+
       if (userId !== getUserId(data.fingerprint, data.ip)) {
         console.log('error, invalid fingerprint');
         return;
       }
-      */
+
       var payload = {
         message: data.message,
         media: data.media,
