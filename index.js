@@ -2,8 +2,7 @@
 
 var Hapi = require('hapi');
 var nconf = require('nconf');
-var WebSocketServer = require('ws').Server;
-var wss;
+var SocketIO = require('socket.io');
 
 var services = require('./lib/services');
 
@@ -56,20 +55,12 @@ server.route({
 });
 
 server.start(function () {
-  wss = new WebSocketServer({ server: server.listener });
+  var io = SocketIO.listen(server.listener);
 
-  wss.on('open', function (ws) {
-    console.log('connected to ws');
-  });
+  io.on('connection', function (socket) {
+    console.log('user connected');
 
-  wss.broadcast = function (data) {
-    for (var i in this.clients) {
-      this.clients[i].send(data);
-    }
-  };
-
-  wss.on('connection', function (ws) {
-    ws.on('message', function (data) {
+    socket.on('message', function (data) {
       data = JSON.parse(data);
 
       var payload = {
@@ -82,7 +73,7 @@ server.start(function () {
           console.log('error ', err);
         } else {
           payload.media = media;
-          wss.broadcast(JSON.stringify(payload));
+          io.emit('message', payload);
         }
       });
     });

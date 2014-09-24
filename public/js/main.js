@@ -1,6 +1,6 @@
 var $ = require('jquery');
-var ReconnectingWebSocket = require('ReconnectingWebSocket');
 var Webrtc2images = require('webrtc2images');
+var socket = io();
 
 var rtc = false;
 var webmSupport = false;
@@ -18,13 +18,6 @@ var testVideo = $('video')[0];
 if (testVideo.canPlayType('video/webm; codecs="vp8, vorbis"')) {
   webmSupport = true;
 }
-
-var ws = new ReconnectingWebSocket('ws://' +
-  location.hostname + (location.port ? ':' + location.port : ''));
-
-ws.onopen = function () {
-  console.log('Connected');
-};
 
 var messages = $('#messages');
 var messagesFiltered = $('#messages-filtered');
@@ -81,7 +74,7 @@ form.submit(function (ev) {
     submitting = true;
     rtc.recordVideo(function (err, frames) {
       if (!err) {
-        ws.send(JSON.stringify({
+        socket.emit('message', JSON.stringify({
           message: comment.val(),
           media: frames
         }));
@@ -93,8 +86,7 @@ form.submit(function (ev) {
   }
 });
 
-ws.onmessage = function (ev) {
-  var data = JSON.parse(ev.data);
+socket.on('message', function (data) {
   var li = $('<li></li>');
   var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
   var p = $('<p></p>');
@@ -103,4 +95,4 @@ ws.onmessage = function (ev) {
   li.append(video).append(p).append(actions);
   messages.append(li);
   li[0].scrollIntoView();
-}
+});

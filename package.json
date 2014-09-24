@@ -17,7 +17,7 @@
     "jade": "~1.5.0",
     "jquery": "~2.1.1",
     "meatspace-publico": "~1.0.1",
-    "ws": "^0.4.32",
+    "socket.io": "^1.1.0",
     "webrtc2images": "~1.4.1",
     "data-uri-to-buffer": "~0.0.3",
     "uuid": "~1.4.1",
