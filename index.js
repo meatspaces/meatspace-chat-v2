@@ -30,13 +30,6 @@ var routes = [
     config: {
       handler: home
     }
-  },
-  {
-    method: 'GET',
-    path: '/recent',
-    config: {
-      handler: services.recent
-    }
   }
 ];
 
@@ -60,6 +53,16 @@ server.start(function () {
   io.on('connection', function (socket) {
     console.log('user connected');
 
+    socket.on('recent', function () {
+      services.recent(function (err, chats) {
+        chats.forEach(function (chat) {
+          setImmediate(function () {
+            io.emit('message', chat.value);
+          });
+        });
+      });
+    });
+
     socket.on('message', function (data) {
       data = JSON.parse(data);
 
@@ -68,12 +71,11 @@ server.start(function () {
         media: data.media
       };
 
-      services.addMessage(data, function (err, media) {
+      services.addMessage(data, function (err, chat) {
         if (err) {
           console.log('error ', err);
         } else {
-          payload.media = media;
-          io.emit('message', payload);
+          io.emit('message', chat);
         }
       });
     });

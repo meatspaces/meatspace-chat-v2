@@ -88,6 +88,8 @@ form.submit(function (ev) {
   }
 });
 
+socket.emit('recent');
+
 socket.on('message', function (data) {
   var li = $('<li></li>');
   var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
