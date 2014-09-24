@@ -89,12 +89,12 @@ server.start(function () {
 
     socket.on('message', function (data) {
       var userId = getUserId(data.fingerprint, ip);
-
+      /*
       if (userId !== getUserId(data.fingerprint, data.ip)) {
         console.log('error, invalid fingerprint');
         return;
       }
-
+      */
       var payload = {
         message: data.message,
         media: data.media,
