@@ -23,6 +23,13 @@ header {
   z-index: 4;
 }
 
+#active {
+  color: #29a4c8;
+  font-family: monospace;
+  font-size: 0.9rem;
+  margin: 0 10px;
+}
+
 #menu {
   display: inline;
   float: right;

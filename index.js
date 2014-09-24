@@ -3,10 +3,13 @@
 var Hapi = require('hapi');
 var nconf = require('nconf');
 var SocketIO = require('socket.io');
+var crypto = require('crypto');
 
 var services = require('./lib/services');
 
 nconf.argv().env().file({ file: 'local.json' });
+
+var users = 0;
 
 var options = {
   views: {
@@ -50,28 +53,55 @@ server.route({
 server.start(function () {
   var io = SocketIO.listen(server.listener);
 
-  io.on('connection', function (socket) {
-    console.log('user connected');
+  var getUserId = function (fingerprint, ip) {
+    return crypto.createHash('md5').update(fingerprint + ip).digest('hex');
+  };
 
-    socket.on('recent', function () {
-      services.recent(function (err, chats) {
-        chats.forEach(function (chat) {
-          setImmediate(function () {
-            io.emit('message', chat.value);
-          });
+  io.on('connection', function (socket) {
+    users ++;
+
+    socket.on('disconnect', function () {
+      users --;
+      if (users < 0) {
+        users = 0;
+      }
+
+      io.emit('active', users);
+    });
+
+    io.emit('active', users);
+
+    services.recent(function (err, chats) {
+      chats.forEach(function (chat) {
+        setImmediate(function () {
+          socket.emit('message', chat.value);
         });
       });
     });
 
+    var ip = socket.handshake.address;
+
+    if (socket.handshake.headers['x-forwarded-for']) {
+      ip = socket.handshake.headers['x-forwarded-for'].split(/ *, */)[0];
+    }
+
+    socket.emit('ip', ip);
+
     socket.on('message', function (data) {
-      data = JSON.parse(data);
+      var userId = getUserId(data.fingerprint, ip);
+
+      if (userId !== getUserId(data.fingerprint, data.ip)) {
+        console.log('error, invalid fingerprint');
+        return;
+      }
 
       var payload = {
         message: data.message,
-        media: data.media
+        media: data.media,
+        fingerprint: userId
       };
 
-      services.addMessage(data, function (err, chat) {
+      services.addMessage(payload, function (err, chat) {
         if (err) {
           console.log('error ', err);
         } else {

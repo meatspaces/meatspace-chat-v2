@@ -24,7 +24,9 @@
     "readimage": "~1.1.1",
     "writepng": "~1.0.1",
     "glitcher": "~1.8.1",
+    "fingerprintjs": "~0.5.3",
     "twitter-text": "~1.9.4",
+    "crypto": "~0.0.3",
     "reconnecting-websocket": "joewalnes/reconnecting-websocket.git#23d2fbcc8165720445cab4a883a694c1342ffc8b"
   },
   "devDependencies": {

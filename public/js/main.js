@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var Webrtc2images = require('webrtc2images');
+var Fingerprint = require('fingerprintjs');
 var socket = io();
 
 var rtc = false;
@@ -14,6 +15,11 @@ rtc = new Webrtc2images({
   type: 'image/png',
   interval: 200
 });
+
+var profile = {
+  ip: false,
+  fingerprint: new Fingerprint({ canvas: true }).get()
+};
 
 var testVideo = $('video')[0];
 
@@ -30,6 +36,7 @@ var invisibleMode = $('#invisible-mode');
 var form = $('form');
 var comment = $('#comment');
 var sadBrowser = $('#sad-browser');
+var active = $('#active');
 
 rtc.startVideo(function (err) {
   if (err) {
@@ -78,7 +85,9 @@ form.submit(function (ev) {
       if (!err) {
         socket.emit('message', JSON.stringify({
           message: comment.val(),
-          media: frames
+          media: frames,
+          ip: profile.ip,
+          fingerprint: profile.fingerprint
         }));
       }
 
@@ -88,10 +97,16 @@ form.submit(function (ev) {
   }
 });
 
-socket.emit('recent');
+socket.on('ip', function (data) {
+  profile.ip = data;
+});
+
+socket.on('active', function (data) {
+  active.text(data);
+});
 
 socket.on('message', function (data) {
-  var li = $('<li></li>');
+  var li = $('<li data-fp="' + data.fingerprint + '"></li>');
   var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
   var p = $('<p></p>');
   var actions = $('<div class="actions"><button id="mute">mute</button><button id="filter">filter</button>');
