@@ -60,6 +60,10 @@ header {
   margin: 0 2px;
 }
 
+#invisible {
+  display: none;
+}
+
 #invisible-mode {
   background-color: #60f3c4;
   padding: 20px 10px 10px;
