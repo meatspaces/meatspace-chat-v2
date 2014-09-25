@@ -143,9 +143,12 @@ messages.on('click', '.filter', function (ev) {
 
 messagesFiltered.on('click', '.unfilter', function (ev) {
   ev.preventDefault();
-  console.log('got here')
-  filteredFP.splice($(this).closest('li').data('fp'), 1);
-  localStorage.setItem('filtered', JSON.stringify(filteredFP));
+  var fp = $(this).closest('li').data('fp');
+
+  if (filteredFP.indexOf(fp) > -1) {
+    filteredFP.splice(fp, 1);
+    localStorage.setItem('filtered', JSON.stringify(filteredFP));
+  }
 });
 
 socket.on('ip', function (data) {
