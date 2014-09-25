@@ -105,6 +105,10 @@ form.submit(function (ev) {
     submitting = true;
     rtc.recordVideo(function (err, frames) {
       if (!err) {
+        if (window.ga) {
+          window.ga('send', 'event', 'message', 'send');
+        }
+
         socket.emit('message', JSON.stringify({
           message: comment.val(),
           media: frames,
@@ -161,6 +165,10 @@ socket.on('active', function (data) {
 });
 
 socket.on('message', function (data) {
+  if (window.ga) {
+    window.ga('send', 'event', 'message', 'receive');
+  }
+
   if (mutedFP.indexOf(data.fingerprint) === -1) {
     var li = $('<li data-fp="' + data.fingerprint + '"></li>');
     var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
