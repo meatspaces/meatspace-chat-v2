@@ -13,6 +13,8 @@ This is an experimental rewrite and may never actually be used. Or maybe it will
 
 ## Installation
 
+    brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libvo-aacenc --with-libvorbis --with-libvpx --with-opencore-amr --with-openjpeg --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-theora --with-tools
+
     npm install
     cp local.json-dist local.json
     npm start

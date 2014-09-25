@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var Webrtc2images = require('webrtc2images');
 var Fingerprint = require('fingerprintjs');
+var crypto = require('crypto');
 var socket = io();
 
 var rtc = false;
@@ -18,7 +19,8 @@ rtc = new Webrtc2images({
 
 var profile = {
   ip: false,
-  fingerprint: new Fingerprint({ canvas: true }).get()
+  fingerprint: new Fingerprint({ canvas: true }).get(),
+  md5: false
 };
 
 var testVideo = $('video')[0];
@@ -28,6 +30,7 @@ if (testVideo.canPlayType('video/webm; codecs="vp8, vorbis"')) {
 }
 
 var messages = $('#messages');
+var body = $('body');
 var messagesFiltered = $('#messages-filtered');
 var filtered = $('#filtered');
 var unmute = $('#unmute');
@@ -37,7 +40,10 @@ var form = $('form');
 var comment = $('#comment');
 var sadBrowser = $('#sad-browser');
 var active = $('#active');
+var muted = [];
 
+muted = JSON.parse(localStorage.get('muted')) || [];
+console.log(muted);
 rtc.startVideo(function (err) {
   if (err) {
     rtc = false;
@@ -62,6 +68,11 @@ invisible.click(function () {
     invisibleMode.slideUp('fast');
     invisible.removeClass('on');
   }
+});
+
+unmute.click(function (ev) {
+  muted = [];
+  localStorage.set('muted', JSON.stringify([]));
 });
 
 invisibleMode.on('click', 'button', function () {
@@ -97,8 +108,22 @@ form.submit(function (ev) {
   }
 });
 
+body.on('click', '.mute', function (ev) {
+  ev.preventDefault();
+  console.log('got here')
+  var fp = $(this).closet('li').data('fp');
+
+  if (muted.indexOf(fp === -1)) {
+    muted.push(fp);
+
+    localStorage.set('muted', muted);
+    messages.find('li[fp="' + fp + '"]').remove();
+  }
+});
+
 socket.on('ip', function (data) {
   profile.ip = data;
+  profile.md5 = crypto.createHash('md5').update(profile.fingerprint + data).digest('hex');
 });
 
 socket.on('active', function (data) {
@@ -106,19 +131,27 @@ socket.on('active', function (data) {
 });
 
 socket.on('message', function (data) {
-  var li = $('<li data-fp="' + data.fingerprint + '"></li>');
-  var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
-  var p = $('<p></p>');
-  var actions = $('<div class="actions"><button id="mute">mute</button><button id="filter">filter</button>');
-  p.html(data.message);
-  li.append(video).append(p).append(actions);
-  messages.append(li);
+  if (muted.indexOf(data.fingerprint) === -1) {
+    var li = $('<li data-fp="' + data.fingerprint + '"></li>');
+    var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
+    var p = $('<p></p>');
+    var userControls = '';
 
-  var children = messages.find('li');
+    if (data.fingerprint !== profile.md5) {
+      userControls = '<button class="mute">mute</button><button class="filter">filter</button>';
+    }
 
-  if (children.length > MAX_LIMIT) {
-    children.slice(0, children.length - MAX_LIMIT).remove();
+    var actions = $('<div class="actions">' + userControls +'</div>');
+    p.html(data.message);
+    li.append(video).append(p).append(actions);
+    messages.append(li);
+
+    var children = messages.find('li');
+
+    if (children.length > MAX_LIMIT) {
+      children.slice(0, children.length - MAX_LIMIT).remove();
+    }
+
+    li[0].scrollIntoView();
   }
-
-  li[0].scrollIntoView();
 });

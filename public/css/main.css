@@ -57,6 +57,7 @@ header {
   border: 0;
   background-color: #111;
   color: #eee;
+  margin: 0 2px;
 }
 
 #invisible-mode {
