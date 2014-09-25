@@ -27,10 +27,11 @@
     "socket.io": "^1.1.0",
     "twitter-text": "~1.9.4",
     "uuid": "~1.4.1",
+    "waypoints": "imakewebthings/jquery-waypoints.git#922fa1a5b4435e8aba032fadbe009a2647b32239",
     "webrtc2images": "~1.4.1"
   },
   "devDependencies": {
-    "nodemon": "~1.2.1",
+    "browserify-shim": "^3.7.0",
     "gulp": "^3.8.7",
     "gulp-autowatch": "0.0.1",
     "gulp-cached": "^1.0.1",
@@ -39,15 +40,25 @@
     "gulp-match": "^0.2.0",
     "gulp-sourcemaps": "^1.1.1",
     "gulp-uglify": "^0.3.1",
+    "mkdirp": "^0.5.0",
+    "nodemon": "~1.2.1",
     "rimraf": "^2.2.8",
     "vinyl-buffer": "0.0.0",
-    "vinyl-source-stream": "^0.1.1",
-    "mkdirp": "^0.5.0"
+    "vinyl-source-stream": "^0.1.1"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/meatspaces/meatspace-chat-v2.git"
   },
   "author": "Edna Piranha <jen@ednapiranha.com> (http://ednapiranha.com)",
-  "license": "BSD"
+  "license": "BSD",
+  "browser": {
+    "waypoints": "./node_modules/jquery-waypoints/lib/noframework.waypoints.js"
+  },
+  "browserify": {
+    "transform": ["browserify-shim"]
+  },
+  "browserify-shim": {
+    "waypoints": "window.Waypoint"
+  }
 }

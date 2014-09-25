@@ -2,6 +2,7 @@ var $ = require('jquery');
 var Webrtc2images = require('webrtc2images');
 var Fingerprint = require('fingerprintjs');
 var crypto = require('crypto');
+var Waypoint = require('waypoints')
 var socket = io();
 
 var rtc = false;
@@ -193,8 +194,33 @@ socket.on('message', function (data) {
     var children = messages.find('li');
 
     if (children.length > MAX_LIMIT) {
-      children.slice(0, children.length - MAX_LIMIT).remove();
+      var toBeRemoved = children.slice(0, children.length - MAX_LIMIT);
+      toBeRemoved.forEach(function (dead) {
+        dead.data('waypoints').forEach(function (waypoint) {
+          waypoint.destroy();
+        });
+      })
+      toBeRemoved.remove();
     }
+
+    var waypoints = [];
+    waypoints.push(new Waypoint({
+      element: li[0],
+      handler: function (direction) {
+        $(this.element).toggleClass('in-view', direction === 'up');
+      },
+      offset: function () {
+        return -$(this.element).outerHeight();
+      }
+    }));
+    waypoints.push(new Waypoint({
+      element: li[0],
+      handler: function (direction) {
+        $(this.element).toggleClass('in-view', direction === 'down');
+      },
+      offset: '100%'
+    }));
+    li.data('waypoints', waypoints);
 
     li[0].scrollIntoView();
   }
