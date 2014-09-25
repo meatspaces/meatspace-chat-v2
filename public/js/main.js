@@ -42,7 +42,11 @@ var sadBrowser = $('#sad-browser');
 var active = $('#active');
 var muted = [];
 
-muted = JSON.parse(localStorage.get('muted')) || [];
+try {
+  muted = JSON.parse(localStorage.getItem('muted'));
+} catch (err) {
+  muted = [];
+}
 console.log(muted);
 rtc.startVideo(function (err) {
   if (err) {
@@ -72,7 +76,7 @@ invisible.click(function () {
 
 unmute.click(function (ev) {
   muted = [];
-  localStorage.set('muted', JSON.stringify([]));
+  localStorage.setItem('muted', JSON.stringify([]));
 });
 
 invisibleMode.on('click', 'button', function () {
@@ -110,14 +114,14 @@ form.submit(function (ev) {
 
 body.on('click', '.mute', function (ev) {
   ev.preventDefault();
-  console.log('got here')
-  var fp = $(this).closet('li').data('fp');
+  var fp = $(this).closest('li').data('fp');
 
   if (muted.indexOf(fp === -1)) {
     muted.push(fp);
 
-    localStorage.set('muted', muted);
-    messages.find('li[fp="' + fp + '"]').remove();
+    localStorage.setItem('muted', JSON.stringify(muted));
+    console.log(body.find('li[data-fp="' + fp + '"]'))
+    body.find('li[data-fp="' + fp + '"]').remove();
   }
 });
 
