@@ -26,88 +26,104 @@ var options = {
 
 var server = Hapi.createServer(nconf.get('domain'), nconf.get('port'), options);
 
-var routes = [
-  {
-    method: 'GET',
-    path: '/',
-    config: {
-      handler: home
-    }
+server.pack.register(require('hapi-auth-cookie'), function (err) {
+
+  if(err){
+    console.error('Auth blowin\' up y\'all');
   }
-];
 
-server.route(routes);
+  server.auth.strategy('session', 'cookie', {
+    password: 'lacroix',
+    redirectOnTry: false,
+  });
 
-server.route({
-  path: '/{path*}',
-  method: "GET",
-  handler: {
-    directory: {
-      path: './dist',
-      listing: false,
-      index: false
-    }
-  }
-});
-
-server.start(function () {
-  var io = SocketIO.listen(server.listener);
-
-  var getUserId = function (fingerprint, ip) {
-    return crypto.createHash('md5').update(fingerprint + ip).digest('hex');
-  };
-
-  io.on('connection', function (socket) {
-    users ++;
-
-    socket.on('disconnect', function () {
-      users --;
-      if (users < 0) {
-        users = 0;
+  var routes = [
+    {
+      method: 'GET',
+      path: '/',
+      config: {
+        handler: home,
+        auth: 'session'
       }
+    }
+  ];
+
+  server.route(routes);
+
+  server.route({
+    path: '/{path*}',
+    method: "GET",
+    config: {
+      handler: {
+        directory: {
+          path: './dist',
+          listing: false,
+          index: false
+        }
+      },
+      auth: 'session'
+    }
+  });
+
+  server.start(function () {
+    var io = SocketIO.listen(server.listener);
+
+    var getUserId = function (fingerprint, ip) {
+      return crypto.createHash('md5').update(fingerprint + ip).digest('hex');
+    };
+
+    io.on('connection', function (socket) {
+      users ++;
+
+      socket.on('disconnect', function () {
+        users --;
+        if (users < 0) {
+          users = 0;
+        }
+
+        io.emit('active', users);
+      });
 
       io.emit('active', users);
-    });
 
-    io.emit('active', users);
-
-    services.recent(function (err, chats) {
-      chats.forEach(function (chat) {
-        setImmediate(function () {
-          socket.emit('message', chat.value);
+      services.recent(function (err, chats) {
+        chats.forEach(function (chat) {
+          setImmediate(function () {
+            socket.emit('message', chat.value);
+          });
         });
       });
-    });
 
-    var ip = socket.handshake.address;
+      var ip = socket.handshake.address;
 
-    if (socket.handshake.headers['x-forwarded-for']) {
-      ip = socket.handshake.headers['x-forwarded-for'].split(/ *, */)[0];
-    }
-
-    socket.emit('ip', ip);
-
-    socket.on('message', function (data) {
-      data = JSON.parse(data);
-      var userId = getUserId(data.fingerprint, ip);
-
-      if (userId !== getUserId(data.fingerprint, data.ip)) {
-        console.log('error, invalid fingerprint');
-        return;
+      if (socket.handshake.headers['x-forwarded-for']) {
+        ip = socket.handshake.headers['x-forwarded-for'].split(/ *, */)[0];
       }
 
-      var payload = {
-        message: data.message,
-        media: data.media,
-        fingerprint: userId
-      };
+      socket.emit('ip', ip);
 
-      services.addMessage(payload, function (err, chat) {
-        if (err) {
-          console.log('error ', err);
-        } else {
-          io.emit('message', chat);
+      socket.on('message', function (data) {
+        data = JSON.parse(data);
+        var userId = getUserId(data.fingerprint, ip);
+
+        if (userId !== getUserId(data.fingerprint, data.ip)) {
+          console.log('error, invalid fingerprint');
+          return;
         }
+
+        var payload = {
+          message: data.message,
+          media: data.media,
+          fingerprint: userId
+        };
+
+        services.addMessage(payload, function (err, chat) {
+          if (err) {
+            console.log('error ', err);
+          } else {
+            io.emit('message', chat);
+          }
+        });
       });
     });
   });
