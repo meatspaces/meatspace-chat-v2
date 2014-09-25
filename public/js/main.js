@@ -40,14 +40,21 @@ var form = $('form');
 var comment = $('#comment');
 var sadBrowser = $('#sad-browser');
 var active = $('#active');
-var muted = [];
-
+var mutedFP = [];
+var filteredFP = [];
+/*
 try {
-  muted = JSON.parse(localStorage.getItem('muted'));
+  mutedFP = JSON.parse(localStorage.getItem('muted'));
 } catch (err) {
-  muted = [];
+  mutedFP = [];
 }
 
+try {
+  filteredFP = JSON.parse(localStorage.getItem('filtered'));
+} catch (err) {
+  filteredFP = [];
+}
+*/
 rtc.startVideo(function (err) {
   if (err) {
     rtc = false;
@@ -75,8 +82,8 @@ invisible.click(function () {
 });
 
 unmute.click(function (ev) {
-  muted = [];
-  localStorage.setItem('muted', JSON.stringify([]));
+  mutedFP = [];
+  localStorage.setItem('muted', JSON.stringify(mutedFP));
 });
 
 invisibleMode.on('click', 'button', function () {
@@ -116,12 +123,28 @@ body.on('click', '.mute', function (ev) {
   ev.preventDefault();
   var fp = $(this).closest('li').data('fp');
 
-  if (muted.indexOf(fp === -1)) {
-    muted.push(fp);
+  if (mutedFP.indexOf(fp === -1)) {
+    mutedFP.push(fp);
 
-    localStorage.setItem('muted', JSON.stringify(muted));
+    localStorage.setItem('muted', JSON.stringify(mutedFP));
     body.find('li[data-fp="' + fp + '"]').remove();
   }
+});
+
+body.on('click', '.filter', function (ev) {
+  ev.preventDefault();
+  var fp = $(this).closest('li').data('fp');
+
+  if (filteredFP.indexOf(fp === -1)) {
+    filteredFP.push(fp);
+
+    localStorage.setItem('filtered', JSON.stringify(filteredFP));
+  }
+});
+
+body.on('click', '.unfilter', function (ev) {
+  ev.preventDefault();
+  // TODO removed filtered
 });
 
 socket.on('ip', function (data) {
@@ -134,7 +157,7 @@ socket.on('active', function (data) {
 });
 
 socket.on('message', function (data) {
-  if (muted.indexOf(data.fingerprint) === -1) {
+  if (mutedFP.indexOf(data.fingerprint) === -1) {
     var li = $('<li data-fp="' + data.fingerprint + '"></li>');
     var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
     var p = $('<p></p>');
@@ -148,6 +171,17 @@ socket.on('message', function (data) {
     p.html(data.message);
     li.append(video).append(p).append(actions);
     messages.append(li);
+
+    if (filteredFP.indexOf(data.fingerprint) > -1) {
+      var liFiltered = li.clone();
+      liFiltered.find('.filter').removeClass('.filter').addClass('.unfilter');
+      messagesFiltered.append(liFiltered);
+
+      var childrenFiltered = messagesFiltered.find('li');
+       if (childrenFiltered.length > MAX_LIMIT) {
+        childrenFiltered.slice(0, childrenFiltered.length - MAX_LIMIT).remove();
+      }
+    }
 
     var children = messages.find('li');
 
