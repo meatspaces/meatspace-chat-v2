@@ -161,6 +161,14 @@ li p {
   width: 30%;
 }
 
+#messages li video {
+  visibility:hidden;
+}
+
+#messages .in-view video {
+  visibility:visible;
+}
+
 #messages-filtered li:last-child {
   margin-bottom: 70px;
 }
