@@ -44,13 +44,13 @@ var mutedFP = [];
 var filteredFP = [];
 
 try {
-  mutedFP = JSON.parse(localStorage.getItem('muted'));
+  mutedFP = JSON.parse(localStorage.getItem('muted')) || [];
 } catch (err) {
   mutedFP = [];
 }
 
 try {
-  filteredFP = JSON.parse(localStorage.getItem('filtered'));
+  filteredFP = JSON.parse(localStorage.getItem('filtered')) || [];
 } catch (err) {
   filteredFP = [];
 }
