@@ -23,7 +23,7 @@ var profile = {
   md5: false
 };
 
-var testVideo = $('video')[0];
+var testVideo = $('<video></video>')[0];
 
 if (testVideo.canPlayType('video/webm; codecs="vp8, vorbis"')) {
   webmSupport = true;
@@ -42,7 +42,7 @@ var sadBrowser = $('#sad-browser');
 var active = $('#active');
 var mutedFP = [];
 var filteredFP = [];
-/*
+
 try {
   mutedFP = JSON.parse(localStorage.getItem('muted'));
 } catch (err) {
@@ -54,7 +54,7 @@ try {
 } catch (err) {
   filteredFP = [];
 }
-*/
+
 rtc.startVideo(function (err) {
   if (err) {
     rtc = false;
@@ -119,7 +119,7 @@ form.submit(function (ev) {
   }
 });
 
-body.on('click', '.mute', function (ev) {
+messages.on('click', '.mute', function (ev) {
   ev.preventDefault();
   var fp = $(this).closest('li').data('fp');
 
@@ -131,20 +131,21 @@ body.on('click', '.mute', function (ev) {
   }
 });
 
-body.on('click', '.filter', function (ev) {
+messages.on('click', '.filter', function (ev) {
   ev.preventDefault();
   var fp = $(this).closest('li').data('fp');
 
   if (filteredFP.indexOf(fp === -1)) {
     filteredFP.push(fp);
-
     localStorage.setItem('filtered', JSON.stringify(filteredFP));
   }
 });
 
-body.on('click', '.unfilter', function (ev) {
+messagesFiltered.on('click', '.unfilter', function (ev) {
   ev.preventDefault();
-  // TODO removed filtered
+  console.log('got here')
+  filteredFP.splice($(this).closest('li').data('fp'), 1);
+  localStorage.setItem('filtered', JSON.stringify(filteredFP));
 });
 
 socket.on('ip', function (data) {
@@ -172,9 +173,12 @@ socket.on('message', function (data) {
     li.append(video).append(p).append(actions);
     messages.append(li);
 
-    if (filteredFP.indexOf(data.fingerprint) > -1) {
+    if (filteredFP.indexOf(data.fingerprint) > -1 || data.fingerprint === profile.md5) {
       var liFiltered = li.clone();
-      liFiltered.find('.filter').removeClass('.filter').addClass('.unfilter');
+      liFiltered.find('.filter')
+                .removeClass('filter')
+                .addClass('unfilter')
+                .text('unfilter');
       messagesFiltered.append(liFiltered);
 
       var childrenFiltered = messagesFiltered.find('li');
