@@ -47,7 +47,7 @@ try {
 } catch (err) {
   muted = [];
 }
-console.log(muted);
+
 rtc.startVideo(function (err) {
   if (err) {
     rtc = false;
@@ -120,7 +120,6 @@ body.on('click', '.mute', function (ev) {
     muted.push(fp);
 
     localStorage.setItem('muted', JSON.stringify(muted));
-    console.log(body.find('li[data-fp="' + fp + '"]'))
     body.find('li[data-fp="' + fp + '"]').remove();
   }
 });
