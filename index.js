@@ -33,8 +33,7 @@ server.pack.register(require('hapi-auth-cookie'), function (err) {
   }
 
   server.auth.strategy('session', 'cookie', {
-    password: 'lacroix',
-    redirectOnTry: false,
+    password: 'lacroix'
   });
 
   var routes = [
@@ -43,7 +42,10 @@ server.pack.register(require('hapi-auth-cookie'), function (err) {
       path: '/',
       config: {
         handler: home,
-        auth: 'session'
+        auth: {
+          strategy: 'session',
+          mode: 'try'
+        }
       }
     }
   ];
@@ -61,7 +63,10 @@ server.pack.register(require('hapi-auth-cookie'), function (err) {
           index: false
         }
       },
-      auth: 'session'
+      auth: {
+        strategy: 'session',
+        mode: 'try'
+      }
     }
   });
 
