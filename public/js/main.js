@@ -2,6 +2,7 @@ var $ = require('jquery');
 var Webrtc2images = require('webrtc2images');
 var Fingerprint = require('fingerprintjs');
 var crypto = require('crypto');
+var music = require('./music');
 //var Waypoint = require('waypoints');
 var socket = io();
 
@@ -56,6 +57,14 @@ rtc.startVideo(function (err) {
   if (err) {
     rtc = false;
   }
+});
+
+music.showMusic();
+
+var audioEl = $('audio');
+audioEl[0].addEventListener('ended', function () {
+  music.showMusic();
+  audioEl[0].play();
 });
 
 filtered.click(function () {
