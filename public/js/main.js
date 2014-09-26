@@ -59,13 +59,7 @@ rtc.startVideo(function (err) {
   }
 });
 
-music.showMusic();
-
-var audioEl = $('audio');
-audioEl[0].addEventListener('ended', function () {
-  music.showMusic();
-  audioEl[0].play();
-});
+$('#music').click(music.toggle);
 
 filtered.click(function () {
   messagesFiltered.slideToggle('fast', function () {
