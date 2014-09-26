@@ -12,10 +12,14 @@ var music = [
 var audioTag = null;
 
 var toggleMusic = function () {
+  var musicEl = $('#music');
+
   if (audioTag) {
+    musicEl.removeClass('on');
     audioTag.pause();
     audioTag = null;
   } else {
+    musicEl.addClass('on');
     audioTag = getSong();
     audioTag.play();
   }
