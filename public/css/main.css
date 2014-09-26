@@ -101,6 +101,11 @@ header {
   background-color: #f00;
 }
 
+button.unfilter {
+  background-color: #65d5ce;
+  color: #2d4544;
+}
+
 .wrapper {
   height: 100%;
   min-width: 520px;

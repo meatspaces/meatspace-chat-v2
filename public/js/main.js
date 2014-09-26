@@ -41,20 +41,16 @@ var form = $('form');
 var comment = $('#comment');
 var sadBrowser = $('#sad-browser');
 var active = $('#active');
-var mutedFP = [];
-var filteredFP = [];
+var mutedFP = {};
+var filteredFP = {};
 
 try {
-  mutedFP = JSON.parse(localStorage.getItem('muted')) || [];
-} catch (err) {
-  mutedFP = [];
-}
+  mutedFP = JSON.parse(localStorage.getItem('muted')) || {};
+} catch (err) { }
 
 try {
-  filteredFP = JSON.parse(localStorage.getItem('filtered')) || [];
-} catch (err) {
-  filteredFP = [];
-}
+  filteredFP = JSON.parse(localStorage.getItem('filtered')) || {};
+} catch (err) { }
 
 rtc.startVideo(function (err) {
   if (err) {
@@ -83,7 +79,7 @@ invisible.click(function () {
 });
 
 unmute.click(function (ev) {
-  mutedFP = [];
+  mutedFP = {};
   localStorage.setItem('muted', JSON.stringify(mutedFP));
 });
 
@@ -128,32 +124,35 @@ messages.on('click', '.mute', function (ev) {
   ev.preventDefault();
   var fp = $(this).closest('li').data('fp');
 
-  if (mutedFP.indexOf(fp === -1)) {
-    mutedFP.push(fp);
+  if (!mutedFP[fp]) {
+    mutedFP[fp] = true;
 
     localStorage.setItem('muted', JSON.stringify(mutedFP));
     body.find('li[data-fp="' + fp + '"]').remove();
   }
 });
 
-messages.on('click', '.filter', function (ev) {
+body.on('click', '.filter', function (ev) {
   ev.preventDefault();
   var fp = $(this).closest('li').data('fp');
 
-  if (filteredFP.indexOf(fp === -1)) {
-    filteredFP.push(fp);
-    localStorage.setItem('filtered', JSON.stringify(filteredFP));
-  }
+  filteredFP[fp] = true;
+  messages.find('li[data-fp="' + fp + '"] .filter').removeClass('filter')
+                                                   .addClass('unfilter')
+                                                   .text('unfilter');
+  localStorage.setItem('filtered', JSON.stringify(filteredFP));
 });
 
-messagesFiltered.on('click', '.unfilter', function (ev) {
+body.on('click', '.unfilter', function (ev) {
   ev.preventDefault();
   var fp = $(this).closest('li').data('fp');
 
-  if (filteredFP.indexOf(fp) > -1) {
-    filteredFP.splice(fp, 1);
-    localStorage.setItem('filtered', JSON.stringify(filteredFP));
-  }
+  delete filteredFP[fp];
+  localStorage.setItem('filtered', JSON.stringify(filteredFP));
+  messagesFiltered.find('li[data-fp="' + fp + '"]').remove();
+  messages.find('li[data-fp="' + fp + '"] .unfilter').removeClass('unfilter')
+                                                     .addClass('filter')
+                                                     .text('filter');
 });
 
 socket.on('ip', function (data) {
@@ -170,14 +169,20 @@ socket.on('message', function (data) {
     window.ga('send', 'event', 'message', 'receive');
   }
 
-  if (mutedFP.indexOf(data.fingerprint) === -1) {
+  if (!mutedFP[data.fingerprint]) {
     var li = $('<li data-fp="' + data.fingerprint + '"></li>');
     var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
     var p = $('<p></p>');
     var userControls = '';
 
     if (data.fingerprint !== profile.md5) {
-      userControls = '<button class="mute">mute</button><button class="filter">filter</button>';
+      userControls = '<button class="mute">mute</button>';
+
+      if (filteredFP[data.fingerprint]) {
+        userControls += '<button class="unfilter">unfilter</button>';
+      } else {
+        userControls += '<button class="filter">filter</button>';
+      }
     }
 
     var actions = $('<div class="actions">' + userControls +'</div>');
@@ -185,12 +190,8 @@ socket.on('message', function (data) {
     li.append(video).append(p).append(actions);
     messages.append(li);
 
-    if (filteredFP.indexOf(data.fingerprint) > -1 || data.fingerprint === profile.md5) {
+    if (filteredFP[data.fingerprint] || data.fingerprint === profile.md5) {
       var liFiltered = li.clone();
-      liFiltered.find('.filter')
-                .removeClass('filter')
-                .addClass('unfilter')
-                .text('unfilter');
       messagesFiltered.append(liFiltered);
 
       var childrenFiltered = messagesFiltered.find('li');
@@ -203,15 +204,19 @@ socket.on('message', function (data) {
 
     if (children.length > MAX_LIMIT) {
       var toBeRemoved = children.slice(0, children.length - MAX_LIMIT);
-      toBeRemoved.forEach(function (dead) {
-        dead.data('waypoints').forEach(function (waypoint) {
-          waypoint.destroy();
-        });
-      })
-      toBeRemoved.remove();
+
+      if (toBeRemoved && typeof toBeRemoved === 'object') {
+        toBeRemoved.forEach(function (dead) {
+          dead.data('waypoints').forEach(function (waypoint) {
+            waypoint.destroy();
+          });
+        })
+        toBeRemoved.remove();
+      }
     }
 
     var waypoints = [];
+
     waypoints.push(new Waypoint({
       element: li[0],
       handler: function (direction) {
@@ -221,6 +226,7 @@ socket.on('message', function (data) {
         return -$(this.element).outerHeight();
       }
     }));
+
     waypoints.push(new Waypoint({
       element: li[0],
       handler: function (direction) {
@@ -228,6 +234,7 @@ socket.on('message', function (data) {
       },
       offset: '100%'
     }));
+
     li.data('waypoints', waypoints);
 
     li[0].scrollIntoView();
