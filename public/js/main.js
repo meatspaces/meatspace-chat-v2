@@ -3,13 +3,11 @@ var Webrtc2images = require('webrtc2images');
 var Fingerprint = require('fingerprintjs');
 var crypto = require('crypto');
 var music = require('./music');
-var Waypoint = require('waypoints');
+var services = require('./services');
 var socket = io();
 
 var rtc = false;
 var webmSupport = false;
-
-var MAX_LIMIT = 15;
 
 rtc = new Webrtc2images({
   width: 200,
@@ -39,7 +37,6 @@ var unmute = $('#unmute');
 var invisible = $('#invisible');
 var invisibleMode = $('#invisible-mode');
 var form = $('form');
-var comment = $('#comment');
 var sadBrowser = $('#sad-browser');
 var active = $('#active');
 var mutedFP = {};
@@ -103,22 +100,8 @@ form.submit(function (ev) {
 
   if (rtc && !submitting) {
     submitting = true;
-    rtc.recordVideo(function (err, frames) {
-      if (!err) {
-        if (window.ga) {
-          window.ga('send', 'event', 'message', 'send');
-        }
-
-        socket.emit('message', JSON.stringify({
-          message: comment.val(),
-          media: frames,
-          ip: profile.ip,
-          fingerprint: profile.fingerprint
-        }));
-      }
-
-      submitting = false;
-      comment.val('');
+    services.sendMessage(profile, rtc, function (submitted) {
+      submitting = submitted;
     });
   }
 });
@@ -168,73 +151,5 @@ socket.on('active', function (data) {
 });
 
 socket.on('message', function (data) {
-  if (window.ga) {
-    window.ga('send', 'event', 'message', 'receive');
-  }
-
-  if (!mutedFP[data.fingerprint]) {
-    var li = $('<li data-fp="' + data.fingerprint + '"></li>');
-    var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
-    var p = $('<p></p>');
-    var userControls = '';
-
-    if (data.fingerprint !== profile.md5) {
-      userControls = '<button class="mute">mute</button>';
-
-      if (filteredFP[data.fingerprint]) {
-        userControls += '<button class="unfilter">unfilter</button>';
-      } else {
-        userControls += '<button class="filter">filter</button>';
-      }
-    }
-
-    var actions = $('<div class="actions">' + userControls +'</div>');
-    p.html(data.message);
-    li.append(video).append(p).append(actions);
-    messages.append(li);
-
-    if (filteredFP[data.fingerprint] || data.fingerprint === profile.md5) {
-      var liFiltered = li.clone();
-      messagesFiltered.append(liFiltered);
-
-      var childrenFiltered = messagesFiltered.find('li');
-       if (childrenFiltered.length > MAX_LIMIT) {
-        childrenFiltered.slice(0, childrenFiltered.length - MAX_LIMIT).remove();
-      }
-    }
-
-    var children = messages.find('li');
-
-    if (children.length > MAX_LIMIT) {
-      children.slice(0, children.length - MAX_LIMIT).each(function () {
-        $(this).data('waypoints').forEach(function (waypoint) {
-          waypoint.destroy();
-        });
-      }).remove();
-    }
-
-    var waypoints = [];
-
-    waypoints.push(new Waypoint({
-      element: li[0],
-      handler: function (direction) {
-        $(this.element).toggleClass('in-view', direction === 'up');
-      },
-      offset: function () {
-        return -$(this.element).outerHeight();
-      }
-    }));
-
-    waypoints.push(new Waypoint({
-      element: li[0],
-      handler: function (direction) {
-        $(this.element).toggleClass('in-view', direction === 'down');
-      },
-      offset: '100%'
-    }));
-
-    li.data('waypoints', waypoints);
-
-    li[0].scrollIntoView();
-  }
+  services.getMessage(data, mutedFP, filteredFP, profile, messages);
 });
