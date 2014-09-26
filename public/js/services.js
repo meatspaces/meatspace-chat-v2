@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var Waypoint = require('waypoints');
 var socket = io();
+var moment = require('moment');
 
 var comment = $('#comment');
 var messages = $('#messages');
@@ -49,11 +50,15 @@ exports.getMessage = function (data, mutedFP, filteredFP, profile, messages) {
         userControls += '<button class="filter">filter</button>';
       }
     }
+    
+    var created = moment(new Date(data.created));
+    var time = $('<time datetime="' + created.toISOString() + '" class="timestamp">' + created.format('LT') + '</time>');
 
     var actions = $('<div class="actions">' + userControls +'</div>');
     p.html(data.message);
     li.append(video).append(p).append(actions);
     messages.append(li);
+    p.append(time);
 
     if (filteredFP[data.fingerprint] || data.fingerprint === profile.md5) {
       var liFiltered = li.clone();
