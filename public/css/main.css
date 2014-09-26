@@ -269,14 +269,14 @@ form {
   text-align: center;
 }
 
-#messages li .timestamp {
+.timestamp {
   border: 0;
+  bottom: 0;
+  left: 202px;
   color: #666;
   display: block;
   font-size: .8rem;
   position: absolute;
-  right: 0;
-  top: 0;
   padding: 8px;
 }
 
