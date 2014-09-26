@@ -269,6 +269,17 @@ form {
   text-align: center;
 }
 
+#messages li .timestamp {
+  border: 0;
+  color: #666;
+  display: block;
+  font-size: .8rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 8px;
+}
+
 @media only screen and (max-width: 850px) {
   #comment {
     width: 60%;
