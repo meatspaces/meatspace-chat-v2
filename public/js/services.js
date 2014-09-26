@@ -50,7 +50,7 @@ exports.getMessage = function (data, mutedFP, filteredFP, profile, messages) {
         userControls += '<button class="filter">filter</button>';
       }
     }
-    
+
     var created = moment(new Date(data.created));
     var time = $('<time datetime="' + created.toISOString() + '" class="timestamp">' + created.format('LT') + '</time>');
 
@@ -94,9 +94,10 @@ exports.getMessage = function (data, mutedFP, filteredFP, profile, messages) {
 
     li.data('waypoints', waypoints);
 
+    var size = $(window).innerHeight();
     var last = messages[0].lastChild;
     var bottom = last ? last.getBoundingClientRect().bottom : 0;
-    var follow = bottom < 777;
+    var follow = bottom < size + 50;
 
     if (follow) {
       if (children.length > MAX_LIMIT) {

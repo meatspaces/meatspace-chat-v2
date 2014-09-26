@@ -121,12 +121,19 @@ a {
 ol {
   clear: both;
   float: left;
-  margin: 5px 0 152px;
+  margin: 5px 0;
   padding-top: 20px;
   position: relative;
   max-width: 600px;
   width: 100%;
   z-index: 1;
+}
+
+#padding {
+  display: block;
+  float: left;
+  margin-top: 152px;
+  width: 100%;
 }
 
 #messages-filtered {
