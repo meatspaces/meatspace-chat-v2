@@ -1,14 +1,35 @@
 var $ = require('jquery');
 
 var music = [
-  'meatspace.wav',
-  'pleasure.wav',
-  'funk.wav'
+  'https://dl.dropboxusercontent.com/u/17064414/champagne.wav',
+  'https://dl.dropboxusercontent.com/u/17064414/feelin-u.wav',
+  'https://dl.dropboxusercontent.com/u/17064414/funk.wav',
+  'https://dl.dropboxusercontent.com/u/17064414/junkyard.wav',
+  'https://dl.dropboxusercontent.com/u/17064414/meatspace.wav',
+  'https://dl.dropboxusercontent.com/u/17064414/pleasure.wav'
 ];
 
-exports.showMusic = function () {
-  var audio = music[Math.floor(Math.random() * music.length)];
-  var audioTag = '<audio controls><source src="https://dl.dropboxusercontent.com/u/17064414/' + audio + '" type="audio/wav"></source></audio>';
+var audioTag = null;
 
-  document.getElementById('audio').innerHTML = audioTag;
+var toggleMusic = function () {
+  if (audioTag) {
+    audioTag.pause();
+    audioTag = null;
+  } else {
+    audioTag = getSong();
+    audioTag.play();
+  }
 };
+
+var getSong = function () {
+  var audio = music[Math.floor(Math.random() * music.length)];
+  var vaudioTag = document.createElement('audio');
+  vaudioTag.src = audio;
+  vaudioTag.addEventListener('ended', function(){
+    audioTag = null;
+    toggleMusic();
+  });
+  return vaudioTag;
+};
+
+exports.toggle = toggleMusic;

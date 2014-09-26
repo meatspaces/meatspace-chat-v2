@@ -183,19 +183,6 @@ li p {
   width: 50%;
 }
 
-#music {
-  position: fixed;
-  right: 10px;
-  top: 50px;
-}
-
-audio {
-  position: fixed;
-  left: 160px;
-  top: 0px;
-  z-index: 6;
-}
-
 video {
   float: left;
   height: 150px;
