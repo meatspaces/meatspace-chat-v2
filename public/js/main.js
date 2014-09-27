@@ -13,7 +13,8 @@ rtc = new Webrtc2images({
   width: 200,
   height: 150,
   frames: 10,
-  type: 'image/png',
+  type: 'image/jpeg',
+  quality: 0.7,
   interval: 200
 });
 
