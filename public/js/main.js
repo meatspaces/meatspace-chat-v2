@@ -14,7 +14,7 @@ rtc = new Webrtc2images({
   height: 150,
   frames: 10,
   type: 'image/jpeg',
-  quality: 0.9,
+  quality: 0.8,
   interval: 200
 });
 
