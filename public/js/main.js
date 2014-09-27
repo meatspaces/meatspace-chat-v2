@@ -32,6 +32,7 @@ if (testVideo.canPlayType('video/mp4; codecs="avc1.42E01E"') ||
 
 var messages = $('#messages');
 var body = $('body');
+var doc = $(document);
 var messagesFiltered = $('#messages-filtered');
 var filtered = $('#filtered');
 var unmute = $('#unmute');
@@ -140,6 +141,17 @@ body.on('click', '.unfilter', function (ev) {
   messages.find('li[data-fp="' + fp + '"] .unfilter').removeClass('unfilter')
                                                      .addClass('filter')
                                                      .text('filter');
+});
+
+doc.on('visibilitychange', function (ev) {
+  var hidden = document.hidden;
+  $('video').each(function () {
+    if (!hidden) {
+      this.pause();
+    } else {
+      this.play();
+    }
+  });
 });
 
 socket.on('ip', function (data) {
