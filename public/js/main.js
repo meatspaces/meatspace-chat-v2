@@ -7,7 +7,7 @@ var services = require('./services');
 var socket = io();
 
 var rtc = false;
-var mp4Support = false;
+var webmSupport = false;
 
 rtc = new Webrtc2images({
   width: 200,
@@ -26,9 +26,8 @@ var profile = {
 
 var testVideo = $('<video></video>')[0];
 
-if (testVideo.canPlayType('video/mp4; codecs="avc1.42E01E"') ||
-    testVideo.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2')) {
-  mp4Support = true;
+if (testVideo.canPlayType('video/webm; codecs="vp8, vorbis"')) {
+  webmSupport = true;
 }
 
 var messages = $('#messages');
@@ -92,7 +91,7 @@ invisibleMode.on('click', 'button', function () {
 
 var submitting = false;
 
-if (!rtc && !mp4Support) {
+if (!rtc || !webmSupport) {
   sadBrowser.show();
   form.remove();
   $('#video-preview').remove();
