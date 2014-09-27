@@ -146,7 +146,7 @@ body.on('click', '.unfilter', function (ev) {
 doc.on('visibilitychange', function (ev) {
   var hidden = document.hidden;
   $('video').each(function () {
-    if (!hidden) {
+    if (hidden) {
       this.pause();
     } else {
       this.play();
