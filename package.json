@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "browserify": "^5.9.3",
-    "crypto": "~0.0.3",
     "data-uri-to-buffer": "~0.0.3",
     "fingerprintjs": "~0.5.3",
     "glitcher": "~1.8.1",
