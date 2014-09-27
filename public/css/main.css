@@ -222,7 +222,7 @@ form {
   z-index: 3;
 }
 
-#comment {
+#composer-message {
   background-color: transparent;
   color: #eee;
   border: 0;
@@ -290,13 +290,13 @@ form {
 }
 
 @media only screen and (max-width: 850px) {
-  #comment {
+  #composer-message {
     width: 60%;
   }
 }
 
 @media only screen and (max-width: 620px) {
-  #comment {
+  #composer-message {
     min-width: 290px;
     width: 50%;
   }

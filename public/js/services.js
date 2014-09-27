@@ -3,7 +3,7 @@ var Waypoint = require('waypoints');
 var socket = io();
 var moment = require('moment');
 
-var comment = $('#comment');
+var comment = $('#composer-message');
 var messages = $('#messages');
 var messagesFiltered = $('#messages-filtered');
 
