@@ -31,6 +31,7 @@ if (testVideo.canPlayType('video/webm; codecs="vp8, vorbis"')) {
 }
 
 var messages = $('#messages');
+var message = $('#composer-message');
 var body = $('body');
 var doc = $(document);
 var messagesFiltered = $('#messages-filtered');
@@ -99,11 +100,13 @@ if (!rtc || !webmSupport) {
 
 form.submit(function (ev) {
   ev.preventDefault();
+  message.prop('disabled', true);
 
   if (rtc && !submitting) {
     submitting = true;
     services.sendMessage(profile, rtc, function (submitted) {
       submitting = submitted;
+      message.prop('disabled', false);
     });
   }
 });
