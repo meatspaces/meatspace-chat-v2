@@ -40,8 +40,10 @@ Emit to 'message' - in JavaScript on the clientside it would be like this:
         message: 'your chat message',
         media: ['data:image/jpeg;base64,<a base64 blob of the jpeg data>', 'data:image/jpeg;base64,<a base64 blob of the jpeg data>', ...],
         ip: '<ip address of user>',
-        fingerprint: '<a unique fingerprint for the device or service>''
+        fingerprint: '<a unique fingerprint for the device or service>'
     }));
+
+Notes: `media` should have an array of 10 data URIs which are recorded 200 ms apart for consistency.
 
 To listen to incoming messages:
 
