@@ -159,7 +159,7 @@ form {
   z-index: 3;
 }
 
-#comment {
+#composer-message {
   background-color: transparent;
   color: #eee;
   border: 0;
@@ -258,7 +258,7 @@ form {
     width: 60%;
   }
 
-  #comment {
+  #composer-message {
     width: 60%;
   }
 }
@@ -268,7 +268,7 @@ form {
     width: 50%;
   }
 
-  #comment {
+  #composer-message {
     min-width: 290px;
     width: 50%;
   }
