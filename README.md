@@ -43,7 +43,7 @@ Emit to 'message' - in JavaScript on the clientside it would be like this:
         fingerprint: '<a unique fingerprint for the device or service>'
     }));
 
-Notes: `media` has to be an array of 10 JPEG data URIs. Ideally they are recorded 200 ms apart for consistency.
+Notes: `media` has to be an array of 10 JPEG data URIs. Ideally they are recorded 200 ms apart for consistency. Image snapshots must be 200x150 in dimension when sent to the server. If you build a mobile app, you can just scale down the view in the interface but please do not send any other sizes or it won't look good.
 
 To listen to incoming messages:
 
