@@ -26,109 +26,90 @@ var options = {
 
 var server = Hapi.createServer(nconf.get('domain'), nconf.get('port'), options);
 
-server.pack.register(require('hapi-auth-cookie'), function (err) {
-
-  if(err){
-    console.error('Auth blowin\' up y\'all');
-  }
-
-  server.auth.strategy('session', 'cookie', {
-    password: 'lacroix'
-  });
-
-  var routes = [
-    {
-      method: 'GET',
-      path: '/',
-      config: {
-        handler: home,
-        auth: {
-          strategy: 'session',
-          mode: 'try'
-        }
-      }
-    }
-  ];
-
-  server.route(routes);
-
-  server.route({
-    path: '/{path*}',
-    method: "GET",
+var routes = [
+  {
+    method: 'GET',
+    path: '/',
     config: {
-      handler: {
-        directory: {
-          path: './dist',
-          listing: false,
-          index: false
-        }
-      },
-      auth: {
-        strategy: 'session',
-        mode: 'try'
+      handler: home
+    }
+  }
+];
+
+server.route(routes);
+
+server.route({
+  path: '/{path*}',
+  method: "GET",
+  config: {
+    handler: {
+      directory: {
+        path: './dist',
+        listing: false,
+        index: false
       }
     }
-  });
+  }
+});
 
-  server.start(function () {
-    var io = SocketIO.listen(server.listener);
+server.start(function () {
+  var io = SocketIO.listen(server.listener);
 
-    var getUserId = function (fingerprint, ip) {
-      return crypto.createHash('md5').update(fingerprint + ip).digest('hex');
-    };
+  var getUserId = function (fingerprint, ip) {
+    return crypto.createHash('md5').update(fingerprint + ip).digest('hex');
+  };
 
-    io.on('connection', function (socket) {
-      users ++;
+  io.on('connection', function (socket) {
+    users ++;
 
-      socket.on('disconnect', function () {
-        users --;
-        if (users < 0) {
-          users = 0;
-        }
-
-        io.emit('active', users);
-      });
+    socket.on('disconnect', function () {
+      users --;
+      if (users < 0) {
+        users = 0;
+      }
 
       io.emit('active', users);
+    });
 
-      services.recent(function (err, chats) {
-        chats.forEach(function (chat) {
-          setImmediate(function () {
-            socket.emit('message', chat.value);
-          });
+    io.emit('active', users);
+
+    services.recent(function (err, chats) {
+      chats.forEach(function (chat) {
+        setImmediate(function () {
+          socket.emit('message', chat.value);
         });
       });
+    });
 
-      var ip = socket.handshake.address;
+    var ip = socket.handshake.address;
 
-      if (socket.handshake.headers['x-forwarded-for']) {
-        ip = socket.handshake.headers['x-forwarded-for'].split(/ *, */)[0];
+    if (socket.handshake.headers['x-forwarded-for']) {
+      ip = socket.handshake.headers['x-forwarded-for'].split(/ *, */)[0];
+    }
+
+    socket.emit('ip', ip);
+
+    socket.on('message', function (data) {
+      data = JSON.parse(data);
+      var userId = getUserId(data.fingerprint, ip);
+
+      if (userId !== getUserId(data.fingerprint, data.ip)) {
+        console.log('error, invalid fingerprint');
+        return;
       }
 
-      socket.emit('ip', ip);
+      var payload = {
+        message: data.message,
+        media: data.media,
+        fingerprint: userId
+      };
 
-      socket.on('message', function (data) {
-        data = JSON.parse(data);
-        var userId = getUserId(data.fingerprint, ip);
-
-        if (userId !== getUserId(data.fingerprint, data.ip)) {
-          console.log('error, invalid fingerprint');
-          return;
+      services.addMessage(payload, function (err, chat) {
+        if (err) {
+          console.log('error ', err);
+        } else {
+          io.emit('message', chat);
         }
-
-        var payload = {
-          message: data.message,
-          media: data.media,
-          fingerprint: userId
-        };
-
-        services.addMessage(payload, function (err, chat) {
-          if (err) {
-            console.log('error ', err);
-          } else {
-            io.emit('message', chat);
-          }
-        });
       });
     });
   });
