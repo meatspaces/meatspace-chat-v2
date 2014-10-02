@@ -1,4 +1,4 @@
-t# Meatspace Chat v2: Electric Boogaloo
+# Meatspace Chat v2: Electric Boogaloo
 
 ## Info
 
@@ -29,6 +29,25 @@ Everything else: [https://trac.ffmpeg.org/wiki/CompilationGuide](https://trac.ff
 ## Accessing the API
 
 This is using the latest version of [socket.io](http://socket.io) and will not work with the old version from the previous meatspace API.
+
+To post:
+
+Emit to 'message' - in JavaScript on the clientside it would be like this:
+
+    var socket = io();
+
+    socket.emit('message', JSON.stringify({
+        message: 'your chat message',
+        media: ['data:image/jpeg;base64,<a base64 blob of the jpeg data>', 'data:image/jpeg;base64,<a base64 blob of the jpeg data>', ...],
+        ip: '<ip address of user>',
+        fingerprint: '<a unique fingerprint for the device or service>''
+    }));
+
+To listen to incoming messages:
+
+    socket.on('message', function (data) {
+        console.log(data);
+    });
 
 ## License
 
