@@ -5,7 +5,6 @@ var moment = require('moment');
 
 var comment = $('#comment');
 var messages = $('#messages');
-var messagesFiltered = $('#messages-filtered');
 
 var MAX_LIMIT = 20;
 
@@ -30,7 +29,7 @@ exports.sendMessage = function (profile, rtc, next) {
   });
 };
 
-exports.getMessage = function (data, mutedFP, filteredFP, profile, messages) {
+exports.getMessage = function (data, mutedFP, profile, messages) {
   if (window.ga) {
     window.ga('send', 'event', 'message', 'receive');
   }
@@ -43,12 +42,6 @@ exports.getMessage = function (data, mutedFP, filteredFP, profile, messages) {
 
     if (data.fingerprint !== profile.md5) {
       userControls = '<button class="mute">mute</button>';
-
-      if (filteredFP[data.fingerprint]) {
-        userControls += '<button class="unfilter">unfilter</button>';
-      } else {
-        userControls += '<button class="filter">filter</button>';
-      }
     }
 
     var created = moment(new Date(data.created));
@@ -59,16 +52,6 @@ exports.getMessage = function (data, mutedFP, filteredFP, profile, messages) {
     li.append(video).append(p).append(actions);
     messages.append(li);
     p.append(time);
-
-    if (filteredFP[data.fingerprint] || data.fingerprint === profile.md5) {
-      var liFiltered = li.clone();
-      messagesFiltered.append(liFiltered);
-
-      var childrenFiltered = messagesFiltered.find('li');
-       if (childrenFiltered.length > MAX_LIMIT) {
-        childrenFiltered.slice(0, childrenFiltered.length - MAX_LIMIT).remove();
-      }
-    }
 
     var children = messages.find('li');
 

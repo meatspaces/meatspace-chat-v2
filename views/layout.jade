@@ -2,7 +2,7 @@ doctype html
 html
   head
     title meatspace
-    meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=0.6, maximum-scale=0.6, minimum-scale=0.6', name='viewport')
+    meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=0.8, maximum-scale=0.8, minimum-scale=0.8', name='viewport')
     meta(content='yes', name='apple-mobile-web-app-capable')
     link(rel='stylesheet', href='/css/reset.css')
     link(rel='stylesheet', href='/css/main.css')
@@ -12,23 +12,21 @@ html
   body(onunload='')
     header
       div
-        a(href="/") meatspace
+        a#info(href='javascript:;') meatspace info
         span#active 0
         #menu
-          button#invisible Invisible
           button#music Music
-          button#filtered Filtered
           button#unmute Unmute
     .wrapper
       block content
       #padding
-    #invisible-mode
-      h2 Invisible mode is on
-      p When invisible mode is activated (in red), your messages will not be displayed in the public chat with your current fingerprint.
-      p Only people in your filtered list can see your messages.
-      p Toggle the Invisible button to be visible in the public chat again.
-      p Note that if someone is listening in on the connection, they can still read your messages.
-      button Okay, got it.
+    #info-screen
+      h2 Meatspace 2.0
+      p This is a rewrite of the old Meatspace code that uses webm instead of gifs.
+      p
+        | The source code for this version is&#xa0;
+        a(href='https://github.com/meatspaces/meatspace-chat-v2/tree/no-glitch', target='_blank') here
+      a(class='close', href='javascript:;') okay got it!
     #sad-browser
       h2
         | So sad&#xa0;

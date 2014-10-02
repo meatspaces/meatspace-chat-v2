@@ -33,23 +33,16 @@ if (testVideo.canPlayType('video/webm; codecs="vp8, vorbis"')) {
 var messages = $('#messages');
 var body = $('body');
 var doc = $(document);
-var messagesFiltered = $('#messages-filtered');
-var filtered = $('#filtered');
 var unmute = $('#unmute');
-var invisible = $('#invisible');
-var invisibleMode = $('#invisible-mode');
 var form = $('form');
 var sadBrowser = $('#sad-browser');
 var active = $('#active');
+var info = $('#info');
+var infoScreen = $('#info-screen');
 var mutedFP = {};
-var filteredFP = {};
 
 try {
   mutedFP = JSON.parse(localStorage.getItem('muted')) || {};
-} catch (err) { }
-
-try {
-  filteredFP = JSON.parse(localStorage.getItem('filtered')) || {};
 } catch (err) { }
 
 rtc.startVideo(function (err) {
@@ -60,33 +53,13 @@ rtc.startVideo(function (err) {
 
 $('#music').click(music.toggle);
 
-filtered.click(function () {
-  messagesFiltered.slideToggle('fast', function () {
-    if (filtered.hasClass('on')) {
-      filtered.removeClass('on');
-    } else {
-      filtered.addClass('on');
-    }
-  });
-});
-
-invisible.click(function () {
-  if (!invisible.hasClass('on')) {
-    invisibleMode.slideDown('fast');
-    invisible.addClass('on');
-  } else {
-    invisibleMode.slideUp('fast');
-    invisible.removeClass('on');
-  }
+$('.close').click(function () {
+  infoScreen.removeClass('on');
 });
 
 unmute.click(function (ev) {
   mutedFP = {};
   localStorage.setItem('muted', JSON.stringify(mutedFP));
-});
-
-invisibleMode.on('click', 'button', function () {
-  invisibleMode.slideUp('fast');
 });
 
 var submitting = false;
@@ -108,6 +81,14 @@ form.submit(function (ev) {
   }
 });
 
+info.click(function () {
+  if (infoScreen.hasClass('on')) {
+    infoScreen.removeClass('on');
+  } else {
+    infoScreen.addClass('on');
+  }
+});
+
 messages.on('click', '.mute', function (ev) {
   ev.preventDefault();
   var fp = $(this).closest('li').data('fp');
@@ -118,29 +99,6 @@ messages.on('click', '.mute', function (ev) {
     localStorage.setItem('muted', JSON.stringify(mutedFP));
     body.find('li[data-fp="' + fp + '"]').remove();
   }
-});
-
-body.on('click', '.filter', function (ev) {
-  ev.preventDefault();
-  var fp = $(this).closest('li').data('fp');
-
-  filteredFP[fp] = true;
-  messages.find('li[data-fp="' + fp + '"] .filter').removeClass('filter')
-                                                   .addClass('unfilter')
-                                                   .text('unfilter');
-  localStorage.setItem('filtered', JSON.stringify(filteredFP));
-});
-
-body.on('click', '.unfilter', function (ev) {
-  ev.preventDefault();
-  var fp = $(this).closest('li').data('fp');
-
-  delete filteredFP[fp];
-  localStorage.setItem('filtered', JSON.stringify(filteredFP));
-  messagesFiltered.find('li[data-fp="' + fp + '"]').remove();
-  messages.find('li[data-fp="' + fp + '"] .unfilter').removeClass('unfilter')
-                                                     .addClass('filter')
-                                                     .text('filter');
 });
 
 doc.on('visibilitychange', function (ev) {
@@ -164,5 +122,5 @@ socket.on('active', function (data) {
 });
 
 socket.on('message', function (data) {
-  services.getMessage(data, mutedFP, filteredFP, profile, messages);
+  services.getMessage(data, mutedFP, profile, messages);
 });
