@@ -36,7 +36,7 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
 
   if (!mutedFP[data.fingerprint]) {
     var li = $('<li data-fp="' + data.fingerprint + '"></li>');
-    var video = $('<video src="' + data.media + '", autoplay="autoplay", loop></video>');
+    var video = $('<video src="' + data.media + '" autoplay="autoplay" loop></video>');
     var p = $('<p></p>');
     var userControls = '';
 
