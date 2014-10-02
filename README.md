@@ -43,7 +43,7 @@ Emit to 'message' - in JavaScript on the clientside it would be like this:
         fingerprint: '<a unique fingerprint for the device or service>'
     }));
 
-Notes: `media` should have an array of 10 data URIs which are recorded 200 ms apart for consistency.
+Notes: `media` has to be an array of 10 JPEG data URIs. Ideally they are recorded 200 ms apart for consistency.
 
 To listen to incoming messages:
 
