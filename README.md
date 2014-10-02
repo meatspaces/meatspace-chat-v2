@@ -26,6 +26,10 @@ Everything else: [https://trac.ffmpeg.org/wiki/CompilationGuide](https://trac.ff
     cp local.json-dist local.json
     npm start
 
+## Accessing the API
+
+This is using the latest version of [socket.io](http://socket.io) and will not work with the old version from the previous meatspace API.
+
 ## License
 
 BSD
