@@ -15,7 +15,7 @@ rtc = new Webrtc2images({
   frames: 10,
   type: 'image/jpeg',
   quality: 0.8,
-  interval: 300
+  interval: 200
 });
 
 var profile = {
