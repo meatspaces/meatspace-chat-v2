@@ -80,6 +80,7 @@ form.submit(function (ev) {
     services.sendMessage(profile, rtc, function (submitted) {
       submitting = submitted;
       message.prop('disabled', false);
+      message.focus();
     });
   }
 });
