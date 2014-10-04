@@ -159,10 +159,13 @@ form {
   z-index: 3;
 }
 
-#composer-message {
+#composer-message, #counter {
   background-color: transparent;
   color: #eee;
   border: 0;
+}
+
+#composer-message {
   font-size: 1.1rem;
   font-weight: 100;
   line-height: 1.3rem;
@@ -170,6 +173,12 @@ form {
   padding: 10px;
   outline: none;
   width: 70%;
+}
+
+#counter {
+  padding-top: 15px;
+  padding-right: 15px;
+  float:right;
 }
 
 .debugger {
