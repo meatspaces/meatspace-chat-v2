@@ -9,6 +9,8 @@ var socket = io();
 var rtc = false;
 var webmSupport = false;
 
+var CHAR_LIMIT = 250;
+
 rtc = new Webrtc2images({
   width: 200,
   height: 150,
@@ -35,12 +37,15 @@ var message = $('#composer-message');
 var body = $('body');
 var doc = $(document);
 var unmute = $('#unmute');
+var counter = $('#counter');
 var form = $('form');
 var sadBrowser = $('#sad-browser');
 var active = $('#active');
 var info = $('#info');
 var infoScreen = $('#info-screen');
 var mutedFP = {};
+
+counter.text(CHAR_LIMIT);
 
 try {
   mutedFP = JSON.parse(localStorage.getItem('muted')) || {};
@@ -71,6 +76,16 @@ if (!rtc || !webmSupport) {
   $('#video-preview').remove();
 }
 
+message.on('keyup', function (ev) {
+  var count = CHAR_LIMIT - message.val().length;
+
+  if (count < 0) {
+    count = 0;
+  }
+
+  counter.text(count);
+});
+
 form.submit(function (ev) {
   ev.preventDefault();
   message.prop('disabled', true);
@@ -81,6 +96,7 @@ form.submit(function (ev) {
       submitting = submitted;
       message.prop('disabled', false);
       message.focus();
+      counter.text(CHAR_LIMIT);
     });
   }
 });
