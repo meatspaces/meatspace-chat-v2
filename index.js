@@ -73,13 +73,7 @@ server.start(function () {
 
     io.emit('active', users);
 
-    services.recent(function (err, chats) {
-      chats.forEach(function (chat) {
-        setImmediate(function () {
-          socket.emit('message', chat.value);
-        });
-      });
-    });
+    services.recent(socket);
 
     var ip = socket.handshake.address;
 
