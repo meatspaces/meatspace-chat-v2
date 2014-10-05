@@ -286,6 +286,8 @@ form {
   }
 
   .timestamp {
+    color: #fff;
+    text-shadow: #111 1px 1px 0;
     font-size: 0.6rem;
     left: -5px;
     top: -5px;
