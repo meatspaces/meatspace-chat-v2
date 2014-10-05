@@ -36,11 +36,10 @@ header {
 }
 
 #menu button {
-  background-color: #111;
+  background-color: #aaa;
   color: #eee;
   border: 0;
   font-size: 0.85rem;
-  text-transform: uppercase;
 }
 
 #menu button:hover {
@@ -60,12 +59,8 @@ header {
   margin: 0 2px;
 }
 
-.actions button:hover {
+.actions button:hover, #menu button.on {
   background-color: #49c3b0;
-}
-
-#menu button.on {
-  background-color: #f00;
 }
 
 button.unfilter {
@@ -74,7 +69,7 @@ button.unfilter {
 
 .wrapper {
   height: 100%;
-  min-width: 520px;
+  min-width: 420px;
   position: relative;
 }
 
@@ -105,7 +100,7 @@ li {
   clear: both;
   float: left;
   height: 150px;
-  min-width: 475px;
+  min-width: 440px;
   position: relative;
   width: 100%;
 }
@@ -113,10 +108,10 @@ li {
 li p {
   border-bottom: 1px solid #ddd;
   float: left;
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 100;
   height: 133px;
-  line-height: 1.1rem;
+  line-height: 1.5rem;
   overflow: hidden;
   padding: 8px 5px 8px 10px;
   min-width: 280px;
@@ -176,9 +171,11 @@ form {
 }
 
 #counter {
+  color: #777;
   padding-top: 15px;
   padding-right: 15px;
-  float:right;
+  font-weight: 100;
+  float: right;
 }
 
 .debugger {
@@ -272,18 +269,53 @@ form {
   }
 }
 
-@media only screen and (max-width: 620px) {
+@media only screen and (max-width: 795px) {
   li p {
+    font-size: 1rem;
+    line-height: 1.3rem;
+  }
+}
+
+@media only screen and (max-width: 690px) {
+  #menu button {
+    font-size: .7rem;
+  }
+
+  #messages li {
+    height: 100px;
+  }
+
+  .timestamp {
+    font-size: 0.6rem;
+    left: -5px;
+    top: -5px;
+  }
+
+  li p {
+    font-size: 0.8rem;
+    height: 83px;
+    line-height: 1.1rem;
+    overflow-y: auto;
     width: 50%;
   }
 
   #composer-message {
-    min-width: 290px;
+    margin-left: 140px;
+    min-width: 220px;
     width: 50%;
+  }
+
+  video, #video-preview {
+    height: 100px;
+    width: 133px;
   }
 }
 
-@media only screen and (max-width: 520px) {
+@media only screen and (max-width: 570px) {
+  #composer-message {
+    width: 40%;
+  }
+
   #messages-filtered {
     left: 5px;
   }
