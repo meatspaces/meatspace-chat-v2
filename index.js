@@ -101,7 +101,8 @@ server.start(function () {
       var payload = {
         message: data.message,
         media: data.media,
-        fingerprint: userId
+        fingerprint: userId,
+        videoType: data.videoType || 'webm'
       };
 
       services.addMessage(payload, function (err, chat) {
