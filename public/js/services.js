@@ -6,7 +6,7 @@ var moment = require('moment');
 var comment = $('#composer-message');
 var messages = $('#messages');
 
-var MAX_LIMIT = 20;
+var MAX_LIMIT = 15;
 
 exports.sendMessage = function (profile, rtc, next) {
   rtc.recordVideo(function (err, frames) {
