@@ -132,10 +132,6 @@ doc.on('visibilitychange', function (ev) {
   });
 });
 
-socket.on('connect', function () {
-  socket.emit('room', 'webm');
-});
-
 socket.on('ip', function (data) {
   profile.ip = data;
   profile.md5 = crypto.createHash('md5').update(profile.fingerprint + data).digest('hex');

@@ -19,7 +19,8 @@ exports.sendMessage = function (profile, rtc, next) {
         message: comment.val(),
         media: frames,
         ip: profile.ip,
-        fingerprint: profile.fingerprint
+        fingerprint: profile.fingerprint,
+        videoType: 'webm'
       }));
     }
 
