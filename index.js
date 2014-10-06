@@ -59,7 +59,34 @@ server.start(function () {
     return crypto.createHash('md5').update(fingerprint + ip).digest('hex');
   };
 
+  var setPayload = function (data, room, ip, io) {
+    data = JSON.parse(data);
+    var userId = getUserId(data.fingerprint, ip);
+
+    if (userId !== getUserId(data.fingerprint, data.ip)) {
+      console.log('error, invalid fingerprint');
+      return;
+    }
+
+    var payload = {
+      message: data.message,
+      media: data.media,
+      fingerprint: userId,
+      videoType: room
+    };
+
+    services.addMessage(payload, function (err, chat) {
+      if (err) {
+        console.log('error ', err);
+      } else {
+        io.sockets.in(room).emit('message', chat);
+      }
+    });
+  };
+
   io.on('connection', function (socket) {
+    var room = 'webm';
+
     users ++;
 
     socket.on('disconnect', function () {
@@ -83,29 +110,17 @@ server.start(function () {
 
     socket.emit('ip', ip);
 
-    socket.on('message', function (data) {
-      data = JSON.parse(data);
-      var userId = getUserId(data.fingerprint, ip);
-
-      if (userId !== getUserId(data.fingerprint, data.ip)) {
-        console.log('error, invalid fingerprint');
-        return;
+    socket.on('room', function (r) {
+      if (r === 'h264') {
+        // don't allow hijacking to a random room
+        room = r;
       }
 
-      var payload = {
-        message: data.message,
-        media: data.media,
-        fingerprint: userId,
-        videoType: data.videoType || 'webm'
-      };
+      socket.join(room);
+    });
 
-      services.addMessage(payload, function (err, chat) {
-        if (err) {
-          console.log('error ', err);
-        } else {
-          io.emit('message', chat);
-        }
-      });
+    socket.on('message', function (data) {
+      setPayload(data, room, ip, io);
     });
   });
 });
