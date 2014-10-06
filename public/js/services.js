@@ -62,7 +62,7 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
       element: li[0],
       handler: function (direction) {
         $(this.element).toggleClass('in-view', direction === 'up');
-        video[direction === 'up' ? 'play' : 'pause']();
+        video[0][direction === 'up' ? 'play' : 'pause']();
       },
       offset: function () {
         return -$(this.element).outerHeight();
@@ -73,7 +73,7 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
       element: li[0],
       handler: function (direction) {
         $(this.element).toggleClass('in-view', direction === 'down');
-        video[direction === 'down' ? 'play' : 'pause']();
+        video[0][direction === 'down' ? 'play' : 'pause']();
       },
       offset: '100%'
     }));
