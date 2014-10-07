@@ -44,6 +44,7 @@ header {
 
 #menu button:hover {
   background-color: #49c3b0;
+  cursor: pointer;
 }
 
 .actions {
@@ -61,6 +62,7 @@ header {
 
 .actions button:hover, #menu button.on {
   background-color: #49c3b0;
+  cursor: pointer;
 }
 
 button.unfilter {
