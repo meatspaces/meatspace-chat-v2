@@ -144,3 +144,7 @@ socket.on('active', function (data) {
 socket.on('message', function (data) {
   services.getMessage(data, mutedFP, profile, messages);
 });
+
+socket.on('connect', function () {
+  socket.emit('join', 'webm');
+});
