@@ -4,17 +4,20 @@ var Fingerprint = require('fingerprintjs');
 var crypto = require('crypto');
 var music = require('./music');
 var services = require('./services');
+var vid2gif = require('./vid2gif');
 var socket = io();
 
 var rtc = false;
 var webmSupport = false;
 
 var CHAR_LIMIT = 250;
+var NUM_FRAMES = 10;
+var GIF_WORKER_PATH = 'gif-worker.js';
 
 rtc = new Webrtc2images({
   width: 200,
   height: 150,
-  frames: 10,
+  frames: NUM_FRAMES,
   type: 'image/jpeg',
   quality: 0.8,
   interval: 200
@@ -119,6 +122,31 @@ messages.on('click', '.mute', function (ev) {
     localStorage.setItem('muted', JSON.stringify(mutedFP));
     body.find('li[data-fp="' + fp + '"]').remove();
   }
+});
+
+messages.on('click', '.convert', function (ev) {
+  var button = $(this);
+  if (button.is('.progress') || button.is('.save')) {
+    return;
+  }
+
+  button.removeClass('error').addClass('progress');
+  button.text('Converting...');
+  var video = button.closest('.video-container').find('video')[0];
+  vid2gif(video, NUM_FRAMES, GIF_WORKER_PATH, function(err, gifBlob) {
+    button.removeClass('progress')
+    if (err) {
+      console.error('Error creating GIF:');
+      console.dir(err)
+      button.addClass('error').text('Error');
+      return;
+    }
+
+    button.addClass('save').text('Save the GIF');
+    var url = window.URL.createObjectURL(gifBlob);
+    button.attr('href', url);
+    button.attr('download', Date.now() + '.gif');
+  });
 });
 
 doc.on('visibilitychange', function (ev) {

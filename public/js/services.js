@@ -35,9 +35,11 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
   }
 
   if (!mutedFP[data.fingerprint]) {
-    var li = $('<li data-fp="' + data.fingerprint + '"></li>');
-    var video = $('<video src="' + data.media + '" autoplay="autoplay" loop></video>');
-    var p = $('<p></p>');
+    var li = $('<li data-fp="' + data.fingerprint + '" />');
+    var videoContainer = $('<div class="video-container"/>');
+    var video = $('<video src="' + data.media + '" autoplay="autoplay" loop />');
+    var convertButton = $('<a class="convert">Convert to GIF</a>');
+    var p = $('<p />');
     var userControls = '';
 
     if (data.fingerprint !== profile.md5) {
@@ -49,7 +51,8 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
 
     var actions = $('<div class="actions">' + userControls +'</div>');
     p.html(data.message);
-    li.append(video).append(p).append(actions);
+    videoContainer.append(video).append(convertButton);
+    li.append(videoContainer).append(p).append(actions);
     messages.append(li);
     p.append(time);
 
@@ -90,6 +93,10 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
           $(this).data('waypoints').forEach(function (waypoint) {
             waypoint.destroy();
           });
+          var saveLink = $(this).find('.save');
+          if (saveLink.length) {
+            window.URL.revokeObjectURL(saveLink.attr('href'));
+          }
         }).remove();
       }
 
