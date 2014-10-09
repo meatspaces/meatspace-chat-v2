@@ -73,7 +73,10 @@ server.start(function () {
 
     io.emit('active', users);
 
-    services.recent(socket);
+    socket.on('join', function (format) {
+      socket.join(format);
+      services.recent(socket, format);
+    })
 
     var ip = socket.handshake.address;
 
@@ -95,16 +98,21 @@ server.start(function () {
       var payload = {
         message: data.message,
         media: data.media,
-        fingerprint: userId,
-        videoType: data.videoType || 'webm'
+        fingerprint: userId
       };
 
       services.addMessage(payload, function (err, chat) {
         if (err) {
-          console.log('error ', err);
-        } else {
-          io.emit('message', chat);
+          return console.log('error ', err);
         }
+
+        var videoData = chat.media;
+        var formats = ['webm', 'mp4'];
+
+        formats.forEach(function (format) {
+          chat.media = videoData[format];
+          io.sockets.in(format).emit('message', chat);
+        });
       });
     });
   });
