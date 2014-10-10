@@ -98,6 +98,7 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
             window.URL.revokeObjectURL(saveLink.attr('href'));
           }
         }).remove();
+        Waypoint.refreshAll();
       }
 
       li[0].scrollIntoView();
