@@ -124,10 +124,83 @@ li p {
   visibility:visible;
 }
 
-video {
+.video-container {
   float: left;
   height: 150px;
   width: 200px;
+  position: relative;
+}
+
+video {
+  height: 100%;
+  width: 100%;
+}
+
+.convert, .convert:focus {
+  position: absolute;
+  display: block;
+  width: 56%;
+  margin: 0px 22%;
+  padding: 8px 0px;
+  bottom: 5%;
+  background-color: #00ced2;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+
+  transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
+}
+
+.video-container .convert {
+  transition: visibility 0.4s, opacity: 0.4s;
+}
+
+.video-container:hover .convert {
+  visibility: visible;
+  opacity: 0.9;
+}
+
+.convert:hover, .convert:active {
+  background-color: #00b4b7;
+  cursor: pointer;
+}
+
+.convert:active {
+  bottom: 4%;
+}
+
+.convert.progress {
+  opacity: 0.6;
+  visibility: visible;
+}
+
+.convert.progress:hover, .convert.progress:active {
+  background-color: #00ced2;
+  cursor: default;
+  opacity: 0.6;
+}
+
+.convert.save {
+  background-color: #16c400;
+}
+
+.convert.save:hover, .convert.save:active {
+  background-color: #13a500;
+}
+
+.convert.error {
+  background-color: #c10019;
+}
+
+.convert.error:hover, .convert.error:active {
+  background-color: #a00012;
 }
 
 footer {
@@ -319,9 +392,14 @@ form {
     width: 50%;
   }
 
-  video, #video-preview {
+  .video-container, #video-preview {
     height: 100px;
     width: 133px;
+  }
+
+  .convert, .convert:focus {
+    width: 70%;
+    margin: 0px 15%;
   }
 }
 

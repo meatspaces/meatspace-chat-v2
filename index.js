@@ -38,6 +38,17 @@ var routes = [
 
 server.route(routes);
 
+// Animated_GIF worker JS file for converting video elements to GIFs
+server.route({
+  method: 'GET',
+  path: '/gif-worker.js',
+  config: {
+    handler: {
+      file: require.resolve('animated_gif/dist/Animated_GIF.worker.min.js')
+    }
+  }
+});
+
 server.route({
   path: '/{path*}',
   method: "GET",

@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "async": "^0.9.0",
+    "animated_gif": "0.0.3",
     "browserify": "^5.9.3",
+    "data-uri-to-blob": "0.0.4",
     "data-uri-to-buffer": "~0.0.3",
     "fingerprintjs": "~0.5.3",
     "glob": "^4.0.6",
