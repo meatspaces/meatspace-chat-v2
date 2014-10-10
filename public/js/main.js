@@ -123,7 +123,7 @@ messages.on('click', '.mute', function (ev) {
 
 doc.on('visibilitychange', function (ev) {
   var hidden = document.hidden;
-  $('video').each(function () {
+  $('.in-view video').each(function () {
     if (hidden) {
       this.pause();
     } else {
