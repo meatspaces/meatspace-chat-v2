@@ -187,14 +187,6 @@ video {
   opacity: 0.6;
 }
 
-.convert.save {
-  background-color: #16c400;
-}
-
-.convert.save:hover, .convert.save:active {
-  background-color: #13a500;
-}
-
 .convert.error {
   background-color: #c10019;
 }
