@@ -14,11 +14,11 @@ exports.sendMessage = function (profile, rtc, next) {
         window.ga('send', 'event', 'message', 'send');
       }
 
-      socket.emit('message', JSON.stringify({
+      socket.emit('message', {
         message: comment.val(),
         media: frames,
         fingerprint: profile.fingerprint
-      }));
+      });
     }
 
     comment.val('');

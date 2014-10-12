@@ -95,12 +95,17 @@ server.start(function () {
     }
 
     socket.on('message', function (data) {
-      if (data.length > 1 * 1024 * 1024 /* 1MB */) {
-        console.log('Oversized message received: ' + (data.length / (1024 * 1024)) + 'MB');
-        return socket.emit('messageack', new Error('Message too large'));
+      if (typeof data === 'string') {
+        // Handle legacy clients that nonsensically double-JSON-encoded
+        // TODO(tec27): remove this code when we're sure no clients are doing this any more
+        if (data.length > 1 * 1024 * 1024 /* 1MB */) {
+          console.log('Oversized message received: ' + (data.length / (1024 * 1024)) + 'MB');
+          return socket.emit('messageack', new Error('Message too large'));
+        }
+
+        data = JSON.parse(data);
       }
 
-      data = JSON.parse(data);
       var ackData = { key: data.key };
       if (!data.fingerprint || data.fingerprint.length > 10) {
         return socket.emit('messageack', new Error('Invalid fingerprint'), ackData);
