@@ -9,6 +9,7 @@ var socket = io();
 
 var rtc = false;
 var webmSupport = false;
+var rtcInitialized = false;
 
 var CHAR_LIMIT = 250;
 var NUM_FRAMES = 10;
@@ -55,8 +56,15 @@ window.addEventListener('storage', function() {
 counter.text(CHAR_LIMIT);
 
 rtc.startVideo(function (err) {
+  rtcInitialized = true;
   if (err) {
     rtc = false;
+  }
+
+  if (!rtc || !webmSupport) {
+    sadBrowser.show();
+    form.remove();
+    $('#video-preview').remove();
   }
 });
 
@@ -73,12 +81,6 @@ unmute.click(function (ev) {
 
 var submitting = false;
 
-if (!rtc || !webmSupport) {
-  sadBrowser.show();
-  form.remove();
-  $('#video-preview').remove();
-}
-
 message.on('keyup', function (ev) {
   var count = CHAR_LIMIT - message.val().length;
 
@@ -91,6 +93,9 @@ message.on('keyup', function (ev) {
 
 form.submit(function (ev) {
   ev.preventDefault();
+  if (!rtcInitialized) {
+    return; // no submitting without dealing with the allow/deny prompt!
+  }
   message.prop('disabled', true);
 
   if (rtc && !submitting) {
