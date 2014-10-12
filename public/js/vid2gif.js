@@ -23,7 +23,7 @@ module.exports = function (videoElem, numFrames, workerPath, cb) {
     gifCreator.destroy();
     delete recordingElem.src;
     window.URL.revokeObjectURL(videoBlob);
-  }
+  };
 
   recordingElem.addEventListener('error', function(err) {
     cleanup();

@@ -76,7 +76,7 @@ server.start(function () {
       users = 0;
     }
     io.emit('active', users);
-  }
+  };
 
   io.on('connection', function (socket) {
     socket.on('disconnect', disconnectHandler);
@@ -87,7 +87,7 @@ server.start(function () {
     socket.on('join', function (format) {
       socket.join(format);
       services.recent(socket, format);
-    })
+    });
 
     var ip = socket.handshake.address;
     if (socket.handshake.headers['x-forwarded-for']) {
