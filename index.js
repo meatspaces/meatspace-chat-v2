@@ -70,18 +70,18 @@ server.start(function () {
     return crypto.createHash('md5').update(fingerprint + ip).digest('hex');
   };
 
+  var disconnectHandler = function() {
+    users--;
+    if (users < 0) {
+      users = 0;
+    }
+    io.emit('active', users);
+  }
+
   io.on('connection', function (socket) {
-    users ++;
+    socket.on('disconnect', disconnectHandler);
 
-    socket.on('disconnect', function () {
-      users --;
-      if (users < 0) {
-        users = 0;
-      }
-
-      io.emit('active', users);
-    });
-
+    users++;
     io.emit('active', users);
 
     socket.on('join', function (format) {
@@ -90,22 +90,22 @@ server.start(function () {
     })
 
     var ip = socket.handshake.address;
-
     if (socket.handshake.headers['x-forwarded-for']) {
       ip = socket.handshake.headers['x-forwarded-for'].split(/ *, */)[0];
     }
 
-    socket.emit('ip', ip);
-
-    socket.on('message', function (data) {
-      data = JSON.parse(data);
-      var userId = getUserId(data.fingerprint, ip);
-
-      if (userId !== getUserId(data.fingerprint, data.ip)) {
-        console.log('error, invalid fingerprint');
-        return;
+    socket.on('message', function (data, cb) {
+      if (data.length > 1 * 1024 * 1024 /* 1MB */) {
+        console.log('Oversized message received: ' + (data.length / (1024 * 1024)) + 'MB');
+        return cb(new Error('Message too large'));
       }
 
+      data = JSON.parse(data);
+      if (!data.fingerprint || data.fingerprint.length > 10) {
+        return cb(new Error('Invalid fingerprint'));
+      }
+
+      var userId = getUserId(data.fingerprint, ip);
       var payload = {
         message: data.message,
         media: data.media,
@@ -114,9 +114,11 @@ server.start(function () {
 
       services.addMessage(payload, function (err, chat) {
         if (err) {
-          return console.log('error ', err);
+          console.log('error ', err);
+          return cb(new Error('Error adding message'));
         }
 
+        cb(null, { userId: userId });
         var videoData = chat.media;
         var formats = ['webm', 'mp4'];
 

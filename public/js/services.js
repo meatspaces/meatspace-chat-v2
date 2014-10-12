@@ -4,11 +4,10 @@ var socket = io();
 var moment = require('moment');
 
 var comment = $('#composer-message');
-var messages = $('#messages');
 
 var MAX_LIMIT = 30;
 
-exports.sendMessage = function (profile, rtc, next) {
+exports.sendMessage = function (profile, rtc, userIdManager, next) {
   rtc.recordVideo(function (err, frames) {
     if (!err) {
       if (window.ga) {
@@ -18,18 +17,22 @@ exports.sendMessage = function (profile, rtc, next) {
       socket.emit('message', JSON.stringify({
         message: comment.val(),
         media: frames,
-        ip: profile.ip,
         fingerprint: profile.fingerprint
-      }));
+      }), function(err, result) {
+        if (err) {
+          return;
+        }
+
+        userIdManager.add(result.userId);
+      });
     }
 
-    submitting = false;
     comment.val('');
-    next(submitting);
+    next();
   });
 };
 
-exports.getMessage = function (data, mutedFP, profile, messages) {
+exports.getMessage = function (data, mutedFP, userIdManager, profile, messages) {
   if (window.ga) {
     window.ga('send', 'event', 'message', 'receive');
   }
@@ -42,12 +45,13 @@ exports.getMessage = function (data, mutedFP, profile, messages) {
     var p = $('<p />');
     var userControls = '';
 
-    if (data.fingerprint !== profile.md5) {
+    if (!userIdManager.contains(data.fingerprint)) {
       userControls = '<button class="mute">mute</button>';
     }
 
     var created = moment(new Date(data.created));
-    var time = $('<time datetime="' + created.toISOString() + '" class="timestamp">' + created.format('LT') + '</time>');
+    var time = $('<time datetime="' + created.toISOString() + '" class="timestamp">' +
+      created.format('LT') + '</time>');
 
     var actions = $('<div class="actions">' + userControls +'</div>');
     p.html(data.message);
