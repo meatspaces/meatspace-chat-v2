@@ -41,7 +41,7 @@ exports.getMessage = function (data, mutedFP, userIdManager, profile, messages) 
     var li = $('<li data-fp="' + data.fingerprint + '" />');
     var videoContainer = $('<div class="video-container"/>');
     var video = $('<video src="' + data.media + '" autoplay="autoplay" loop />');
-    var convertButton = $('<a class="convert">Convert to GIF</a>');
+    var convertButton = $('<a class="convert">Save as GIF</a>');
     var p = $('<p />');
     var userControls = '';
 

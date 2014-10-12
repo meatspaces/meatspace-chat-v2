@@ -139,10 +139,14 @@ messages.on('click', '.convert', function (ev) {
       return;
     }
 
-    button.addClass('save').text('Save the GIF');
+    button.addClass('save').text('Save as GIF');
     var url = window.URL.createObjectURL(gifBlob);
     button.attr('href', url);
     button.attr('download', Date.now() + '.gif');
+
+    var virtualClick = document.createEvent('MouseEvents');
+    virtualClick.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); 
+    button[0].dispatchEvent(virtualClick);
   });
 });
 
