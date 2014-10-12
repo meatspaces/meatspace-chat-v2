@@ -95,7 +95,7 @@ form.submit(function (ev) {
 
   if (rtc && !submitting) {
     submitting = true;
-    services.sendMessage(profile, rtc, userIdManager, function (err) {
+    services.sendMessage(profile, rtc, function (err) {
       submitting = false;
       message.prop('disabled', false);
       message.focus();
@@ -167,6 +167,14 @@ socket.on('active', function (data) {
 
 socket.on('message', function (data) {
   services.getMessage(data, mutedFP, userIdManager, profile, messages);
+});
+
+socket.on('messageack', function(err, result) {
+  if (err) {
+    return;
+  }
+
+  userIdManager.add(result.userId);
 });
 
 socket.on('connect', function () {

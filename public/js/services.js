@@ -7,7 +7,7 @@ var comment = $('#composer-message');
 
 var MAX_LIMIT = 30;
 
-exports.sendMessage = function (profile, rtc, userIdManager, next) {
+exports.sendMessage = function (profile, rtc, next) {
   rtc.recordVideo(function (err, frames) {
     if (!err) {
       if (window.ga) {
@@ -18,13 +18,7 @@ exports.sendMessage = function (profile, rtc, userIdManager, next) {
         message: comment.val(),
         media: frames,
         fingerprint: profile.fingerprint
-      }), function(err, result) {
-        if (err) {
-          return;
-        }
-
-        userIdManager.add(result.userId);
-      });
+      }));
     }
 
     comment.val('');

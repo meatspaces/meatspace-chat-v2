@@ -94,18 +94,20 @@ server.start(function () {
       ip = socket.handshake.headers['x-forwarded-for'].split(/ *, */)[0];
     }
 
-    socket.on('message', function (data, cb) {
+    socket.on('message', function (data) {
       if (data.length > 1 * 1024 * 1024 /* 1MB */) {
         console.log('Oversized message received: ' + (data.length / (1024 * 1024)) + 'MB');
-        return cb(new Error('Message too large'));
+        return socket.emit('messageack', new Error('Message too large'));
       }
 
       data = JSON.parse(data);
+      var ackData = { key: data.key };
       if (!data.fingerprint || data.fingerprint.length > 10) {
-        return cb(new Error('Invalid fingerprint'));
+        return socket.emit('messageack', new Error('Invalid fingerprint'), ackData);
       }
 
       var userId = getUserId(data.fingerprint, ip);
+      ackData.userId = userId;
       var payload = {
         message: data.message,
         media: data.media,
@@ -115,10 +117,10 @@ server.start(function () {
       services.addMessage(payload, function (err, chat) {
         if (err) {
           console.log('error ', err);
-          return cb(new Error('Error adding message'));
+          return socket.emit('messageack', new Error('Error adding message'), ackData);
         }
 
-        cb(null, { userId: userId });
+        socket.emit('messageack', null, ackData);
         var videoData = chat.media;
         var formats = ['webm', 'mp4'];
 
