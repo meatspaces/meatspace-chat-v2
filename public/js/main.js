@@ -131,10 +131,10 @@ messages.on('click', '.convert', function (ev) {
   button.text('Converting...');
   var video = button.closest('.video-container').find('video')[0];
   vid2gif(video, NUM_FRAMES, GIF_WORKER_PATH, function(err, gifBlob) {
-    button.removeClass('progress')
+    button.removeClass('progress');
     if (err) {
       console.error('Error creating GIF:');
-      console.dir(err)
+      console.dir(err);
       button.addClass('error').text('Error');
       return;
     }
