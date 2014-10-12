@@ -100,15 +100,20 @@ server.start(function () {
         // TODO(tec27): remove this code when we're sure no clients are doing this any more
         if (data.length > 1 * 1024 * 1024 /* 1MB */) {
           console.log('Oversized message received: ' + (data.length / (1024 * 1024)) + 'MB');
-          return socket.emit('messageack', new Error('Message too large'));
+          return socket.emit('messageack', 'Message too large');
         }
 
-        data = JSON.parse(data);
+        try {
+          data = JSON.parse(data);
+        } catch (err) {
+          console.log('Received malformed JSON');
+          return socket.emit('messageack', 'Malformed JSON');
+        }
       }
 
       var ackData = { key: data.key };
       if (!data.fingerprint || data.fingerprint.length > 10) {
-        return socket.emit('messageack', new Error('Invalid fingerprint'), ackData);
+        return socket.emit('messageack', 'Invalid fingerprint', ackData);
       }
 
       var userId = getUserId(data.fingerprint, ip);
@@ -122,7 +127,7 @@ server.start(function () {
       services.addMessage(payload, function (err, chat) {
         if (err) {
           console.log('error ', err);
-          return socket.emit('messageack', new Error('Error adding message'), ackData);
+          return socket.emit('messageack', 'Error adding message', ackData);
         }
 
         socket.emit('messageack', null, ackData);
