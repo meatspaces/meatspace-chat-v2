@@ -36,13 +36,13 @@ Emit to 'message' - in JavaScript on the clientside it would be like this:
 
     var socket = io();
 
-    socket.emit('message', JSON.stringify({
+    socket.emit('message', {
         message: 'your chat message',
         media: ['data:image/jpeg;base64,<a base64 blob of the jpeg data>', 'data:image/jpeg;base64,<a base64 blob of the jpeg data>', ...],
         ip: '<ip address of user>',
         fingerprint: '<a unique fingerprint for the device or service>',
         videoType: 'webm'
-    }));
+    });
 
 Notes: `media` has to be an array of 10 JPEG data URIs. Ideally they are recorded 200 ms apart for consistency. Image snapshots must be 200x150 in dimension when sent to the server. If you build a mobile app, you can just scale down the view in the interface but please do not send any other sizes or it won't look good.
 
@@ -51,7 +51,7 @@ Notes: `media` has to be an array of 10 JPEG data URIs. Ideally they are recorde
 To listen to incoming messages:
 
     socket.on('message', function (data) {
-        console.log(data);
+        console.dir(data);
     });
 
 ## License
