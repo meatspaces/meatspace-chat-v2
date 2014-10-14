@@ -393,6 +393,10 @@ form {
     width: 70%;
     margin: 0px 15%;
   }
+
+  #padding {
+    height: 102px;
+  }
 }
 
 @media only screen and (max-width: 570px) {
