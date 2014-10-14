@@ -54,6 +54,11 @@ To listen to incoming messages:
         console.dir(data);
     });
 
+## Contribution Guidelines
+
+Read our [Contributors' Guide](https://github.com/meatspaces/meatspace-chat-v2/blob/master/CONTRIBUTING.md)
+for details.
+
 ## License
 
 BSD
