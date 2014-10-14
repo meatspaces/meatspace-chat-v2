@@ -112,7 +112,7 @@ server.start(function () {
       }
 
       var ackData = { key: data.key };
-      if (!data.fingerprint || data.fingerprint.length > 10) {
+      if (!data.fingerprint || data.fingerprint.length > 32) {
         return socket.emit('messageack', 'Invalid fingerprint', ackData);
       }
 
