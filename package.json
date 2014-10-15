@@ -28,7 +28,7 @@
     "twitter-text": "~1.9.4",
     "uuid": "~1.4.1",
     "waypoints": "imakewebthings/jquery-waypoints.git#922fa1a5b4435e8aba032fadbe009a2647b32239",
-    "webrtc2images": "~1.4.1"
+    "webrtc2images": "~1.4.3"
   },
   "devDependencies": {
     "browserify-shim": "^3.7.0",
