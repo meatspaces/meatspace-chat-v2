@@ -1,5 +1,7 @@
 # Meatspace Chat v2: Electric Boogaloo
 
+[![Dependency Status](https://david-dm.org/meatspaces/meatspace-chat-v2.svg)](https://david-dm.org/meatspaces/meatspace-chat-v2) [![devDependency Status](https://david-dm.org/meatspaces/meatspace-chat-v2/dev-status.svg)](https://david-dm.org/meatspaces/meatspace-chat-v2#info=devDependencies)
+
 ## Info
 
 This is a rewrite of the old meatspace code and there are some notes:
