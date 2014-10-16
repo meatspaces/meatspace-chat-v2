@@ -11,20 +11,17 @@ nconf.argv().env().file({ file: 'local.json' });
 
 var users = 0;
 
-var options = {
-  views: {
-    engines: {
-      jade: require('jade')
-    },
-    isCached: process.env.node === 'production',
-    path: __dirname + '/views',
-    compileOptions: {
-      pretty: true
-    }
+var server = Hapi.createServer(nconf.get('domain'), nconf.get('port'));
+server.views({
+  engines: {
+    jade: require('jade')
+  },
+  isCached: process.env.node === 'production',
+  path: __dirname + '/views',
+  compileOptions: {
+    pretty: true
   }
-};
-
-var server = Hapi.createServer(nconf.get('domain'), nconf.get('port'), options);
+});
 
 var routes = [
   {

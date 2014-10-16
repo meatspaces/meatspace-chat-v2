@@ -18,7 +18,7 @@
     "data-uri-to-buffer": "~0.0.3",
     "fingerprintjs": "~0.5.3",
     "glob": "^4.0.6",
-    "hapi": "~6.4.0",
+    "hapi": "^7.0.0",
     "jade": "^1.7.0",
     "jquery": "~2.1.1",
     "meatspace-publico": "~1.0.1",
