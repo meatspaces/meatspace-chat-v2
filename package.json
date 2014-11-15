@@ -11,7 +11,6 @@
     "start": "gulp & nodemon index.js"
   },
   "dependencies": {
-    "animated_gif": "0.0.3",
     "async": "^0.9.0",
     "browserify": "^6.1.0",
     "data-uri-to-blob": "0.0.4",
@@ -27,6 +26,7 @@
     "socket.io": "^1.1.0",
     "twitter-text": "~1.9.4",
     "uuid": "^2.0.1",
+    "vid2gif": "^1.0.1",
     "waypoints": "imakewebthings/jquery-waypoints.git#922fa1a5b4435e8aba032fadbe009a2647b32239",
     "webrtc2images": "~1.4.3"
   },

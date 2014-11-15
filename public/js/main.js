@@ -3,7 +3,7 @@ var Webrtc2images = require('webrtc2images');
 var Fingerprint = require('fingerprintjs');
 var music = require('./music');
 var services = require('./services');
-var vid2gif = require('./vid2gif');
+var vid2gif = require('vid2gif');
 var UserIdManager = require('./user-id-manager');
 var socket = io();
 
@@ -135,7 +135,7 @@ messages.on('click', '.convert', function (ev) {
   button.removeClass('error').addClass('progress');
   button.text('Converting...');
   var video = button.closest('.video-container').find('video')[0];
-  vid2gif(video, NUM_FRAMES, GIF_WORKER_PATH, function(err, gifBlob) {
+  vid2gif(video, NUM_FRAMES, function(err, gifBlob) {
     button.removeClass('progress');
     if (err) {
       console.error('Error creating GIF:');
