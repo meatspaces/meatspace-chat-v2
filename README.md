@@ -46,9 +46,11 @@ Emit to 'message' - in JavaScript on the clientside it would be like this:
         videoType: 'webm'
     });
 
-Notes: `media` has to be an array of 10 JPEG data URIs. Ideally they are recorded 200 ms apart for consistency. Image snapshots must be 200x150 in dimension when sent to the server. If you build a mobile app, you can just scale down the view in the interface but please do not send any other sizes or it won't look good.
+Notes: 
 
-`videoType` defaults to 'webm' but if you specifically request 'h264' then an mp4 will be sent instead. This is useful if you want to build an iOS client.
+- `media` has to be an array of 10 JPEG data URIs. Ideally they are recorded 200 ms apart for consistency. Image snapshots must be 200x150 in dimension when sent to the server. If you build a mobile app, you can just scale down the view in the interface but please do not send any other sizes or it won't look good.
+
+- `videoType` defaults to 'webm' but you can request 'mp4' to have that sent instead. This is useful if you want to build an iOS client.
 
 To listen to incoming messages:
 
