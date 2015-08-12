@@ -6,8 +6,8 @@
 
 This is a rewrite of the old meatspace code and there are some notes:
 
-* This will not work with iOS since they do not support webm. File a ticket with them if you care.
-* As a result, this will not work with the current iOS app MeatChat.
+* This will not work with the old meatspace ios app, as the API has changed. Also, it does not work on ios browsers since they do not support using the camera directly.
+* There's a new ios app available on [the app store](https://itunes.apple.com/no/app/meatchat2/id933605029?l=nb&mt=8).
 * This should work in Android within Firefox or Chrome.
 
 ## Install ffmpeg
